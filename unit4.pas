@@ -49,6 +49,9 @@ implementation
 uses
   Unit1;
 
+var
+  CurTskKey: Integer;
+
 {$R *.lfm}
 procedure TTaskDescEditForm.FormActivate(Sender: TObject);
 var
@@ -64,6 +67,7 @@ begin
     tskdscEditBreefEdit.Text := Form1.SQLQuery10.FieldByName('breef').AsString;
     tskdscEditMemo.Text := Form1.SQLQuery10.FieldByName('text').AsString;
     tdKey := Form1.SQLQuery10.FieldByName('key').AsInteger;
+    CurTskKey := tdKey;
 
     SqlString := 'select cur_date from diary_record where task_desc_key = ' + IntToStr(tdKey) + ' order by cur_date;';
     SQLQuery2.Close;
@@ -111,12 +115,12 @@ end;
 
 procedure TTaskDescEditForm.tskdescEditEditButtonClick(Sender: TObject);
 begin
-  tskdscwaddActionExecute(Sender);
+  tskdscwedtActionExecute(Sender);
 end;
 
 procedure TTaskDescEditForm.tskdescEditNewButtonClick(Sender: TObject);
 begin
-  tskdscwedtActionExecute(Sender);
+  tskdscwaddActionExecute(Sender);
 end;
 
 procedure TTaskDescEditForm.tskdscwaddActionExecute(Sender: TObject);
@@ -154,10 +158,13 @@ begin
   CurrKey := CurTskKey;
   MemoString := DelChars(DelChars(tskdscEditMemo.Lines.Text, #13), #10);
 
-  SqlString := ' breef = '''+tskEditBreefEdit.Text+
+  SqlString := ' breef = '''+tskdscEditBreefEdit.Text+
   ''', text = '''+MemoString+
+  ''' where key = '+IntToStr(CurrKey)+
   ';';
   SqlString := 'update task_desc set'+SqlString;
+
+//  Label1.Caption := SqlString;
 
   SQLQuery1.Close;
   SQLQuery1.SQL.Clear;

@@ -1,14 +1,14 @@
 object TaskDescEditForm: TTaskDescEditForm
-  Left = 743
+  Left = 767
   Height = 295
-  Top = 429
+  Top = 568
   Width = 395
   Caption = 'Task Description'
   ClientHeight = 295
   ClientWidth = 395
   OnActivate = FormActivate
   OnCreate = FormCreate
-  LCLVersion = '1.4.0.4'
+  LCLVersion = '1.6.0.4'
   object ToolBar6: TToolBar
     Left = 5
     Height = 26
@@ -256,6 +256,7 @@ object TaskDescEditForm: TTaskDescEditForm
     FieldDefs = <>
     Database = Form1.SQLite3Connection1
     Transaction = Form1.SQLTransaction1
+    Options = []
     Params = <>
     left = 184
     top = 96
@@ -272,6 +273,7 @@ object TaskDescEditForm: TTaskDescEditForm
     SQL.Strings = (
       ''
     )
+    Options = []
     Params = <>
     left = 184
     top = 152
