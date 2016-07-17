@@ -203,15 +203,19 @@ var
   MaxKey: longint;
   MaxKeyStr: string;
   ExpStr: string;
+  DoneIntStr: string;
 begin
   ExpStr := FormatDateTime('yyyy-mm-dd', memEditExpirationDateEdit.Date);
   ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + '-' + IntToStr(memEditMinutesSpinEdit.Value);
   Memo1String := DelChars(DelChars(memEditMemo.Lines.Text, #13), #10);
+  if(memEditDoneCheckBox.Checked) then DoneIntStr := '1'
+  else DoneIntStr := '0';
+
   SqlString := 'UPDATE mem SET'+
   ' breef='''+memEditBreefEdit.Text+
   ''', text='''+Memo1String+
   ''', expiration='''+ExpStr+
-  ''', done='+IntToStr(0)+
+  ''', done='+DoneIntStr+
   ', priority = '+IntToStr(memEditPrioritySpinEdit.Value)+
   ', color_red = '+IntToStr(Red(memEditColorButton.ButtonColor))+
   ', color_green = '+IntToStr(Green(memEditColorButton.ButtonColor))+

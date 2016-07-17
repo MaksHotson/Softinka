@@ -13,7 +13,7 @@ object Form2: TForm2
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  LCLVersion = '1.4.0.4'
+  LCLVersion = '1.6.0.4'
   object memEditMemo: TMemo
     Left = 5
     Height = 152
@@ -82,6 +82,7 @@ object Form2: TForm2
     NumGlyphs = 1
     MaxLength = 0
     TabOrder = 4
+    Text = '16.07.2016'
   end
   object memEditHoursSpinEdit: TSpinEdit
     Left = 302
@@ -457,6 +458,7 @@ object Form2: TForm2
     SQL.Strings = (
       'select max(key) from mem'
     )
+    Options = []
     Params = <>
     left = 72
     top = 128

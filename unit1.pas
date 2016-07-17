@@ -18,10 +18,16 @@ type
     BitBtn13: TBitBtn;
     BitBtn14: TBitBtn;
     BitBtn15: TBitBtn;
+    BitBtn25: TBitBtn;
+    BitBtn26: TBitBtn;
+    BitBtn27: TBitBtn;
     DBBackupButton: TButton;
     DataSource11: TDataSource;
     DateTimePicker2: TDateTimePicker;
     DateTimePicker3: TDateTimePicker;
+    DBGrid1: TDBGrid;
+    MemTabsEdit: TEdit;
+    Panel2: TPanel;
     pplLabel: TLabel;
     ppltsksDBGrid: TDBGrid;
     ppledtDBGrid: TDBGrid;
@@ -32,7 +38,10 @@ type
     RadioButton5: TRadioButton;
     RadioButton6: TRadioButton;
     SQLQuery11: TSQLQuery;
+    MemTabsStringGrid: TStringGrid;
+    TabControl1: TTabControl;
     TabSheet11: TTabSheet;
+    TabSheet4: TTabSheet;
     ToolBar5: TToolBar;
     ToolButton2: TToolButton;
     wnwTAction: TAction;
@@ -134,7 +143,6 @@ type
     DataSource4: TDataSource;
     DataSource5: TDataSource;
     DateTimePicker1: TDateTimePicker;
-    DBGrid1: TDBGrid;
     prjedtDBGrid: TDBGrid;
     fncedtDBGrid: TDBGrid;
     DBGrid5: TDBGrid;
@@ -176,6 +184,8 @@ type
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
     TabSheet7: TTabSheet;
+    procedure BitBtn25Click(Sender: TObject);
+    procedure BitBtn26Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -200,6 +210,7 @@ type
     procedure memaddActionExecute(Sender: TObject);
     procedure memdelActionExecute(Sender: TObject);
     procedure memedtActionExecute(Sender: TObject);
+    procedure MemTabsStringGridDblClick(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -244,6 +255,8 @@ type
     procedure s_fmemActCheckBoxChange(Sender: TObject);
     procedure s_fmemsrtRadioGroupSelectionChanged(Sender: TObject);
     procedure s_ftsksrtRadioGroupSelectionChanged(Sender: TObject);
+    procedure TabControl1Change(Sender: TObject);
+    procedure TabControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure ToolBar3Click(Sender: TObject);
     procedure TrayIcon1DblClick(Sender: TObject);
     procedure tskaddActionExecute(Sender: TObject);
@@ -285,6 +298,7 @@ var
   sf_r1, sf_r2, sf_dt1, sf_dt2, sf_dl1, sf_tl1: integer;
   diatskDBLCBEdited: Boolean;
   pplKey: Integer;
+  MemTabsStringCount: Integer;
 
 implementation
 
@@ -368,6 +382,8 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  MemTabsStringCount := 0;
+
   SQliteLibraryName := ExtractFilePath(Application.ExeName) + 'sqlite3.dll';
 
   SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
@@ -414,6 +430,18 @@ end;
 procedure TForm1.Button1Click(Sender: TObject);
 begin
   Application.Terminate;
+end;
+
+procedure TForm1.BitBtn26Click(Sender: TObject);
+begin
+  MemTabsStringGrid.RowCount := MemTabsStringCount + 1;
+  MemTabsStringGrid.Cells[0,MemTabsStringCount] := MemTabsEdit.Text;
+  MemTabsStringCount := MemTabsStringCount + 1;
+end;
+
+procedure TForm1.BitBtn25Click(Sender: TObject);
+begin
+  MemTabsStringGrid.Cells[MemTabsStringGrid.Col, MemTabsStringGrid.Row] := MemTabsEdit.Text;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -824,6 +852,11 @@ begin
 // SQLite3Connection1.Connected := False;
 //  Form2.OnActivate(Sender);
   Form2.Show;
+end;
+
+procedure TForm1.MemTabsStringGridDblClick(Sender: TObject);
+begin
+
 end;
 
 procedure TForm1.MenuItem1Click(Sender: TObject);
@@ -1355,6 +1388,26 @@ begin
   SQLQuery9.SQL.Add('update sort_filters set num=' + IntToStr(s_ftsksrtRadioGroup.ItemIndex) + ' where name = ''tl1'';');
   SQLQuery9.ExecSQL;
   SQLTransaction1.Commit;
+end;
+
+procedure TForm1.TabControl1Change(Sender: TObject);
+begin
+  if(TabControl1.Tabs[TabControl1.TabIndex] = 'All') then begin
+    SQLQuery1.Close;
+    SQLQuery1.SQL.Clear;
+    SQLQuery1.SQL.Add('select * from mem where done = 0;');
+    SQLQuery1.Open;
+  end
+  else if(TabControl1.Tabs[TabControl1.TabIndex] = 'Done') then begin
+    SQLQuery1.Close;
+    SQLQuery1.SQL.Clear;
+    SQLQuery1.SQL.Add('select * from mem where done = 1;');
+    SQLQuery1.Open;
+  end;
+end;
+
+procedure TForm1.TabControl1Changing(Sender: TObject; var AllowChange: Boolean);
+begin
 end;
 
 procedure TForm1.ToolBar3Click(Sender: TObject);
