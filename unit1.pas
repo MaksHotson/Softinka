@@ -21,6 +21,7 @@ type
     BitBtn25: TBitBtn;
     BitBtn26: TBitBtn;
     BitBtn27: TBitBtn;
+    DataSource12: TDataSource;
     DBBackupButton: TButton;
     DataSource11: TDataSource;
     DateTimePicker2: TDateTimePicker;
@@ -39,6 +40,7 @@ type
     RadioButton6: TRadioButton;
     SQLQuery11: TSQLQuery;
     MemTabsStringGrid: TStringGrid;
+    SQLQuery12: TSQLQuery;
     TabControl1: TTabControl;
     TabSheet11: TTabSheet;
     TabSheet4: TTabSheet;
@@ -378,6 +380,25 @@ begin
   diatskDBLookupComboBox.Visible := True;
 
   RadioButton4.Checked := True;
+
+  if(MemTabsStringGrid.Cells[0,0] = '') then begin
+    SQLQuery12.Close;
+    SQLQuery12.SQL.Clear;
+    SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs;');
+    SQLQuery12.Open;
+    SQLQuery12.First;
+    while not SQLQuery12.EOF do
+    begin
+      MemTabsStringGrid.RowCount := MemTabsStringCount + 1;
+      MemTabsStringGrid.Cells[0,MemTabsStringCount] := SQLQuery12.FieldByName('name').AsString;
+      MemTabsStringGrid.Cells[1,MemTabsStringCount] := SQLQuery12.FieldByName('key').AsString;
+      MemTabsStringGrid.Cells[2,MemTabsStringCount] := SQLQuery12.FieldByName('order').AsString;
+      MemTabsStringGrid.Cells[3,MemTabsStringCount] := SQLQuery12.FieldByName('function').AsString;
+      MemTabsStringCount := MemTabsStringCount + 1;
+      SQLQuery12.Next;
+    end;
+  end;
+
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
