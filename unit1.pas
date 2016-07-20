@@ -384,7 +384,7 @@ begin
   if(MemTabsStringGrid.Cells[0,0] = '') then begin
     SQLQuery12.Close;
     SQLQuery12.SQL.Clear;
-    SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs;');
+    SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs order by "order";');
     SQLQuery12.Open;
     SQLQuery12.First;
     while not SQLQuery12.EOF do
@@ -394,6 +394,7 @@ begin
       MemTabsStringGrid.Cells[1,MemTabsStringCount] := SQLQuery12.FieldByName('key').AsString;
       MemTabsStringGrid.Cells[2,MemTabsStringCount] := SQLQuery12.FieldByName('order').AsString;
       MemTabsStringGrid.Cells[3,MemTabsStringCount] := SQLQuery12.FieldByName('function').AsString;
+      TabControl1.Tabs.Add(MemTabsStringGrid.Cells[0,MemTabsStringCount]);
       MemTabsStringCount := MemTabsStringCount + 1;
       SQLQuery12.Next;
     end;
