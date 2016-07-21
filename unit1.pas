@@ -21,6 +21,9 @@ type
     BitBtn25: TBitBtn;
     BitBtn26: TBitBtn;
     BitBtn27: TBitBtn;
+    MemTabsSaveToDBButton: TButton;
+    MemTabDnButton: TButton;
+    MemTabUpButton: TButton;
     DataSource12: TDataSource;
     DBBackupButton: TButton;
     DataSource11: TDataSource;
@@ -212,7 +215,10 @@ type
     procedure memaddActionExecute(Sender: TObject);
     procedure memdelActionExecute(Sender: TObject);
     procedure memedtActionExecute(Sender: TObject);
+    procedure MemTabDnButtonClick(Sender: TObject);
+    procedure MemTabsSaveToDBButtonClick(Sender: TObject);
     procedure MemTabsStringGridDblClick(Sender: TObject);
+    procedure MemTabUpButtonClick(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -874,6 +880,78 @@ begin
 // SQLite3Connection1.Connected := False;
 //  Form2.OnActivate(Sender);
   Form2.Show;
+end;
+
+procedure TForm1.MemTabUpButtonClick(Sender: TObject);
+begin
+  if(MemTabsStringGrid.Row <> 0) then begin
+    MemTabsStringGrid.RowCount := MemTabsStringGrid.RowCount + 1;
+
+    MemTabsStringGrid.Cells[0,MemTabsStringGrid.RowCount-1] := MemTabsStringGrid.Cells[0,MemTabsStringGrid.Row-1];
+    MemTabsStringGrid.Cells[1,MemTabsStringGrid.RowCount-1] := MemTabsStringGrid.Cells[1,MemTabsStringGrid.Row-1];
+    MemTabsStringGrid.Cells[2,MemTabsStringGrid.RowCount-1] := MemTabsStringGrid.Cells[2,MemTabsStringGrid.Row-1];
+    MemTabsStringGrid.Cells[3,MemTabsStringGrid.RowCount-1] := MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row-1];
+
+    MemTabsStringGrid.Cells[0,MemTabsStringGrid.Row-1] := MemTabsStringGrid.Cells[0,MemTabsStringGrid.Row];
+    MemTabsStringGrid.Cells[1,MemTabsStringGrid.Row-1] := MemTabsStringGrid.Cells[1,MemTabsStringGrid.Row];
+    MemTabsStringGrid.Cells[2,MemTabsStringGrid.Row-1] := MemTabsStringGrid.Cells[2,MemTabsStringGrid.Row];
+    MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row-1] := MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row];
+
+    MemTabsStringGrid.Cells[0,MemTabsStringGrid.Row] := MemTabsStringGrid.Cells[0,MemTabsStringGrid.RowCount-1];
+    MemTabsStringGrid.Cells[1,MemTabsStringGrid.Row] := MemTabsStringGrid.Cells[1,MemTabsStringGrid.RowCount-1];
+    MemTabsStringGrid.Cells[2,MemTabsStringGrid.Row] := MemTabsStringGrid.Cells[2,MemTabsStringGrid.RowCount-1];
+    MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row] := MemTabsStringGrid.Cells[3,MemTabsStringGrid.RowCount-1];
+
+    MemTabsStringGrid.RowCount := MemTabsStringGrid.RowCount - 1;
+
+    MemTabsStringGrid.Row := MemTabsStringGrid.Row - 1;
+  end;
+end;
+
+procedure TForm1.MemTabDnButtonClick(Sender: TObject);
+begin
+  if(MemTabsStringGrid.Row <> (MemTabsStringGrid.RowCount-1)) then begin
+    MemTabsStringGrid.RowCount := MemTabsStringGrid.RowCount + 1;
+
+    MemTabsStringGrid.Cells[0,MemTabsStringGrid.RowCount-1] := MemTabsStringGrid.Cells[0,MemTabsStringGrid.Row+1];
+    MemTabsStringGrid.Cells[1,MemTabsStringGrid.RowCount-1] := MemTabsStringGrid.Cells[1,MemTabsStringGrid.Row+1];
+    MemTabsStringGrid.Cells[2,MemTabsStringGrid.RowCount-1] := MemTabsStringGrid.Cells[2,MemTabsStringGrid.Row+1];
+    MemTabsStringGrid.Cells[3,MemTabsStringGrid.RowCount-1] := MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row+1];
+
+    MemTabsStringGrid.Cells[0,MemTabsStringGrid.Row+1] := MemTabsStringGrid.Cells[0,MemTabsStringGrid.Row];
+    MemTabsStringGrid.Cells[1,MemTabsStringGrid.Row+1] := MemTabsStringGrid.Cells[1,MemTabsStringGrid.Row];
+    MemTabsStringGrid.Cells[2,MemTabsStringGrid.Row+1] := MemTabsStringGrid.Cells[2,MemTabsStringGrid.Row];
+    MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row+1] := MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row];
+
+    MemTabsStringGrid.Cells[0,MemTabsStringGrid.Row] := MemTabsStringGrid.Cells[0,MemTabsStringGrid.RowCount-1];
+    MemTabsStringGrid.Cells[1,MemTabsStringGrid.Row] := MemTabsStringGrid.Cells[1,MemTabsStringGrid.RowCount-1];
+    MemTabsStringGrid.Cells[2,MemTabsStringGrid.Row] := MemTabsStringGrid.Cells[2,MemTabsStringGrid.RowCount-1];
+    MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row] := MemTabsStringGrid.Cells[3,MemTabsStringGrid.RowCount-1];
+
+    MemTabsStringGrid.RowCount := MemTabsStringGrid.RowCount - 1;
+
+    MemTabsStringGrid.Row := MemTabsStringGrid.Row + 1;
+  end;
+end;
+
+procedure TForm1.MemTabsSaveToDBButtonClick(Sender: TObject);
+begin
+  SQLQuery12.Close;
+  SQLQuery12.SQL.Clear;
+  SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs order by "order";');
+  SQLQuery12.Open;
+  SQLQuery12.First;
+  while not SQLQuery12.EOF do
+  begin
+    MemTabsStringGrid.RowCount := MemTabsStringCount + 1;
+    MemTabsStringGrid.Cells[0,MemTabsStringCount] := SQLQuery12.FieldByName('name').AsString;
+    MemTabsStringGrid.Cells[1,MemTabsStringCount] := SQLQuery12.FieldByName('key').AsString;
+    MemTabsStringGrid.Cells[2,MemTabsStringCount] := SQLQuery12.FieldByName('order').AsString;
+    MemTabsStringGrid.Cells[3,MemTabsStringCount] := SQLQuery12.FieldByName('function').AsString;
+    TabControl1.Tabs.Add(MemTabsStringGrid.Cells[0,MemTabsStringCount]);
+    MemTabsStringCount := MemTabsStringCount + 1;
+    SQLQuery12.Next;
+  end;
 end;
 
 procedure TForm1.MemTabsStringGridDblClick(Sender: TObject);
