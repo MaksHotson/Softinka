@@ -191,6 +191,7 @@ type
     TabSheet7: TTabSheet;
     procedure BitBtn25Click(Sender: TObject);
     procedure BitBtn26Click(Sender: TObject);
+    procedure BitBtn27Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -290,6 +291,7 @@ type
   procedure GridFormating();
   procedure Grid6Formating();
   procedure Grid8Formating();
+  procedure ReadMemTabsFromDB();
 
 var
   mems: array of longint;
@@ -315,6 +317,9 @@ implementation
 { TForm1 }
 
 procedure TForm1.FormActivate(Sender: TObject);
+var
+  j: Integer;
+  CurTabKey: Integer;
 begin
   SQlite3Connection1.DatabaseName:=ExtractFilePath(Application.ExeName) + 'softinka.db3';
   SQlite3Connection1.Connected:=True;
@@ -387,25 +392,15 @@ begin
 
   RadioButton4.Checked := True;
 
-  if(MemTabsStringGrid.Cells[0,0] = '') then begin
-    SQLQuery12.Close;
-    SQLQuery12.SQL.Clear;
-    SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs order by "order";');
-    SQLQuery12.Open;
-    SQLQuery12.First;
-    while not SQLQuery12.EOF do
-    begin
-      MemTabsStringGrid.RowCount := MemTabsStringCount + 1;
-      MemTabsStringGrid.Cells[0,MemTabsStringCount] := SQLQuery12.FieldByName('name').AsString;
-      MemTabsStringGrid.Cells[1,MemTabsStringCount] := SQLQuery12.FieldByName('key').AsString;
-      MemTabsStringGrid.Cells[2,MemTabsStringCount] := SQLQuery12.FieldByName('order').AsString;
-      MemTabsStringGrid.Cells[3,MemTabsStringCount] := SQLQuery12.FieldByName('function').AsString;
-      TabControl1.Tabs.Add(MemTabsStringGrid.Cells[0,MemTabsStringCount]);
-      MemTabsStringCount := MemTabsStringCount + 1;
-      SQLQuery12.Next;
-    end;
+  if(Form1.MemTabsStringGrid.Cells[0,0] = '') then
+  begin
+    ReadMemTabsFromDB();
+    for j := 0 to MemTabsStringGrid.RowCount - 1 do
+      if(MemTabsStringGrid.Cells[3,j] = '1') then
+        CurTabKey := j;
+    TabControl1.TabIndex := CurTabKey;
+    TabControl1Change(Sender);
   end;
-
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -461,10 +456,30 @@ begin
 end;
 
 procedure TForm1.BitBtn26Click(Sender: TObject);
+var
+  i: Integer;
 begin
-  MemTabsStringGrid.RowCount := MemTabsStringCount + 1;
-  MemTabsStringGrid.Cells[0,MemTabsStringCount] := MemTabsEdit.Text;
-  MemTabsStringCount := MemTabsStringCount + 1;
+  i := MemTabsStringGrid.RowCount;
+  MemTabsStringGrid.RowCount := i + 1;
+  MemTabsStringGrid.Cells[0,i] := MemTabsEdit.Text;
+  MemTabsStringGrid.Cells[3,i] := '0';
+end;
+
+procedure TForm1.BitBtn27Click(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i := MemTabsStringGrid.Row to MemTabsStringGrid.RowCount - 2 do
+  if(MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row] = '0') or
+    (MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row] = '') then begin
+
+    MemTabsStringGrid.Cells[0,i] := MemTabsStringGrid.Cells[0,i+1];
+    MemTabsStringGrid.Cells[1,i] := MemTabsStringGrid.Cells[1,i+1];
+    MemTabsStringGrid.Cells[2,i] := MemTabsStringGrid.Cells[2,i+1];
+    MemTabsStringGrid.Cells[3,i] := MemTabsStringGrid.Cells[3,i+1];
+
+    MemTabsStringGrid.RowCount := MemTabsStringGrid.RowCount - 1;
+  end;
 end;
 
 procedure TForm1.BitBtn25Click(Sender: TObject);
@@ -935,23 +950,78 @@ begin
 end;
 
 procedure TForm1.MemTabsSaveToDBButtonClick(Sender: TObject);
+var
+  i: Integer;
+  j: Integer;
+  k: Integer;
+  CurTabKey: Integer;
+  CurTabKeyArray: Array of Integer;
+  SqlString: String;
 begin
+  i := 0;
+  k := 0;
+  SetLength(CurTabKeyArray, k + 1);
+  CurTabKeyArray[k] := -1;
   SQLQuery12.Close;
   SQLQuery12.SQL.Clear;
-  SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs order by "order";');
+  SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs;');
   SQLQuery12.Open;
   SQLQuery12.First;
   while not SQLQuery12.EOF do
   begin
-    MemTabsStringGrid.RowCount := MemTabsStringCount + 1;
-    MemTabsStringGrid.Cells[0,MemTabsStringCount] := SQLQuery12.FieldByName('name').AsString;
-    MemTabsStringGrid.Cells[1,MemTabsStringCount] := SQLQuery12.FieldByName('key').AsString;
-    MemTabsStringGrid.Cells[2,MemTabsStringCount] := SQLQuery12.FieldByName('order').AsString;
-    MemTabsStringGrid.Cells[3,MemTabsStringCount] := SQLQuery12.FieldByName('function').AsString;
-    TabControl1.Tabs.Add(MemTabsStringGrid.Cells[0,MemTabsStringCount]);
-    MemTabsStringCount := MemTabsStringCount + 1;
+    CurTabKey := -1;
+    for j := 0 to MemTabsStringGrid.RowCount - 1 do
+      if(MemTabsStringGrid.Cells[1,j] = SQLQuery12.FieldByName('key').AsString) then
+        CurTabKey := SQLQuery12.FieldByName('key').AsInteger;
+    if(CurTabKey = -1) then
+    begin
+      CurTabKeyArray[k] := SQLQuery12.FieldByName('key').AsInteger;
+      k := k + 1;
+      SetLength(CurTabKeyArray, k + 1);
+    end;
     SQLQuery12.Next;
+    i := i + 1;
   end;
+  CurTabKeyArray[k] := -1;
+
+  k := 0;
+  while CurTabKeyArray[k] <> -1 do
+  begin
+    SQLQuery12.Close;
+    SQLQuery12.SQL.Clear;
+    SQLQuery12.SQL.Add('delete from memtabs where key='+IntToStr(CurTabKeyArray[k])+';');
+    SQLQuery12.ExecSQL;
+  end;
+  SQLite3Connection1.Transaction.Commit;
+
+  for i := 0 to MemTabsStringGrid.RowCount - 1 do
+  begin
+//    MemTabsStringGrid.Cells[0,i] := SQLQuery12.FieldByName('name').AsString;
+//    MemTabsStringGrid.Cells[1,i] := SQLQuery12.FieldByName('key').AsString;
+//    MemTabsStringGrid.Cells[2,i] := SQLQuery12.FieldByName('order').AsString;
+//    MemTabsStringGrid.Cells[3,i] := SQLQuery12.FieldByName('function').AsString;
+    if(MemTabsStringGrid.Cells[1,i] = '') then
+    begin
+      SqlString := 'INSERT INTO memtabs (name, "order", function) VALUES ('''+
+      MemTabsStringGrid.Cells[0,i]+''', '+
+      IntToStr(i)+', '+
+      '0);';
+    end else
+    begin
+      SqlString := 'update memtabs set "order" = '+IntToStr(i)+
+      ', name = '''+MemTabsStringGrid.Cells[0,i]+
+      ''' where key = '+MemTabsStringGrid.Cells[1,i]+';';
+    end;
+    SQLQuery12.Close;
+    SQLQuery12.SQL.Clear;
+    SQLQuery12.SQL.Add(SqlString);
+    SQLQuery12.ExecSQL;
+  end;
+
+  Form1.SQLTransaction1.Commit;
+
+  ReadMemTabsFromDB();
+
 end;
 
 procedure TForm1.MemTabsStringGridDblClick(Sender: TObject);
@@ -1491,17 +1561,38 @@ begin
 end;
 
 procedure TForm1.TabControl1Change(Sender: TObject);
+var
+  i: Integer;
 begin
-  if(TabControl1.Tabs[TabControl1.TabIndex] = 'All') then begin
+  i := 0;
+  while TabControl1.Tabs[TabControl1.TabIndex] <> MemTabsStringGrid.Cells[0,i] do
+  begin
+//    TabControl1.Tabs[TabControl1.TabIndex]
+    i := i + 1;
+  end;
+//  MemTabsStringGrid.Cells[0,i] := SQLQuery12.FieldByName('name').AsString;
+//  MemTabsStringGrid.Cells[1,i] := SQLQuery12.FieldByName('key').AsString;
+//  MemTabsStringGrid.Cells[2,i] := SQLQuery12.FieldByName('order').AsString;
+//  MemTabsStringGrid.Cells[3,i] := SQLQuery12.FieldByName('function').AsString;
+
+//  if(TabControl1.Tabs[TabControl1.TabIndex] = 'All') then begin
+  if(StrToInt(MemTabsStringGrid.Cells[3,i]) = 1) then begin
     SQLQuery1.Close;
     SQLQuery1.SQL.Clear;
     SQLQuery1.SQL.Add('select * from mem where done = 0;');
     SQLQuery1.Open;
   end
-  else if(TabControl1.Tabs[TabControl1.TabIndex] = 'Done') then begin
+//  else if(TabControl1.Tabs[TabControl1.TabIndex] = 'Done') then begin
+  else if(StrToInt(MemTabsStringGrid.Cells[3,i]) = 2) then begin
     SQLQuery1.Close;
     SQLQuery1.SQL.Clear;
     SQLQuery1.SQL.Add('select * from mem where done = 1;');
+    SQLQuery1.Open;
+  end
+  else begin
+    SQLQuery1.Close;
+    SQLQuery1.SQL.Clear;
+    SQLQuery1.SQL.Add('select * from mem where tab_key = ' + MemTabsStringGrid.Cells[1,i] + ';');
     SQLQuery1.Open;
   end;
 end;
@@ -1666,6 +1757,36 @@ end;
 procedure TForm1.wrkMenuItemClick(Sender: TObject);
 begin
   wnwWActionExecute(Sender);
+end;
+
+procedure ReadMemTabsFromDB();
+var
+  i: Integer;
+begin
+  i := 0;
+//  Form1.MemTabsStringGrid.RowCount := 0;
+  Form1.MemTabsStringGrid.Clear;
+  Form2.MemTabComboBox.Items.Clear;
+  Form1.SQLQuery12.Close;
+  Form1.SQLQuery12.SQL.Clear;
+  Form1.SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs order by "order";');
+  Form1.SQLQuery12.Open;
+  Form1.SQLQuery12.First;
+  while not Form1.SQLQuery12.EOF do
+  begin
+    Form1.MemTabsStringGrid.RowCount := i + 1;
+    Form1.MemTabsStringGrid.Cells[0,i] := Form1.SQLQuery12.FieldByName('name').AsString;
+    Form1.MemTabsStringGrid.Cells[1,i] := Form1.SQLQuery12.FieldByName('key').AsString;
+    Form1.MemTabsStringGrid.Cells[2,i] := Form1.SQLQuery12.FieldByName('order').AsString;
+    Form1.MemTabsStringGrid.Cells[3,i] := Form1.SQLQuery12.FieldByName('function').AsString;
+    Form1.TabControl1.Tabs.Add(Form1.MemTabsStringGrid.Cells[0,i]);
+    if(Form1.MemTabsStringGrid.Cells[3,i] = '0') then
+      Form2.MemTabComboBox.Items.Add(Form1.MemTabsStringGrid.Cells[0,i]);
+    i := i + 1;
+    Form1.SQLQuery12.Next;
+  end;
+  if(Form2.MemTabComboBox.Items.Count > 0) then
+    Form2.MemTabComboBox.ItemIndex := 0;
 end;
 
 end.

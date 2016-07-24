@@ -16,6 +16,7 @@ type
   TForm2 = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
+    MemTabComboBox: TComboBox;
     memEditColorButton: TColorButton;
     memEditColorDialog: TColorDialog;
     memEditPriorityLabel: TLabel;
@@ -58,6 +59,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure memwaddActionExecute(Sender: TObject);
+    procedure memwdelActionExecute(Sender: TObject);
     procedure memwedtActionExecute(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
@@ -73,6 +75,9 @@ var
 implementation
 uses
   Unit1, Unit3, Unit4;
+
+var
+  i: Integer;
 
 {$R *.lfm}
 
@@ -135,6 +140,13 @@ begin
     memEditBreefEdit.Text := '';
     Form2.Color := clDefault;
   end;
+
+  i := 0;
+  if(MemTabComboBox.Text <> '') then
+  while MemTabComboBox.Text <> Form1.MemTabsStringGrid.Cells[0,i] do
+  begin
+    i := i + 1;
+  end;
 end;
 
 procedure TForm2.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -173,7 +185,7 @@ begin
   ExpStr := FormatDateTime('yyyy-mm-dd', memEditExpirationDateEdit.Date);
   ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + '-' + IntToStr(memEditMinutesSpinEdit.Value);
   Memo1String := DelChars(DelChars(memEditMemo.Lines.Text, #13), #10);
-  SqlString := ' (key, breef, text, expiration, done, priority, color_red, color_green, color_blue) VALUES ('''+
+  SqlString := ' (key, breef, text, expiration, done, priority, color_red, color_green, color_blue, tab_key) VALUES ('''+
   MaxKeyStr+''', '''+
   memEditBreefEdit.Text+''', '''+
   Memo1String+''', '''+
@@ -183,6 +195,7 @@ begin
   IntToStr(Red(memEditColorButton.ButtonColor))+', '+
   IntToStr(Green(memEditColorButton.ButtonColor))+', '+
   IntToStr(Blue(memEditColorButton.ButtonColor))+', '+
+  IntToStr(i)+', '+
   ');';
   SqlString := 'INSERT INTO mem'+SqlString;
 
@@ -194,6 +207,11 @@ begin
   SQLQuery1.ExecSQL;
   Form1.SQLTransaction1.Commit;
   Form2.Close;
+end;
+
+procedure TForm2.memwdelActionExecute(Sender: TObject);
+begin
+
 end;
 
 procedure TForm2.memwedtActionExecute(Sender: TObject);
@@ -220,6 +238,7 @@ begin
   ', color_red = '+IntToStr(Red(memEditColorButton.ButtonColor))+
   ', color_green = '+IntToStr(Green(memEditColorButton.ButtonColor))+
   ', color_blue = '+IntToStr(Blue(memEditColorButton.ButtonColor))+
+  ', tab_key = '+IntToStr(i)+
   ' WHERE key='+IntToStr(CurMemKey)+';';
 
   memEditTempLabel.Caption:=SqlString;

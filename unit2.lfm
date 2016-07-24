@@ -1,7 +1,7 @@
 object Form2: TForm2
-  Left = 778
+  Left = 998
   Height = 295
-  Top = 332
+  Top = 334
   Width = 395
   Caption = 'Mem Edit'
   ClientHeight = 295
@@ -409,19 +409,20 @@ object Form2: TForm2
       ParentShowHint = False
       ShowHint = True
       TabOrder = 4
+      Visible = False
     end
   end
   object memEditTempLabel: TLabel
-    Left = 40
+    Left = 120
     Height = 13
-    Top = 40
+    Top = 72
     Width = 91
     Caption = 'memEditTempLabel'
     ParentColor = False
     Visible = False
   end
   object memEditPrioritySpinEdit: TSpinEdit
-    Left = 234
+    Left = 272
     Height = 21
     Top = 36
     Width = 45
@@ -429,7 +430,7 @@ object Form2: TForm2
     TabOrder = 14
   end
   object memEditPriorityLabel: TLabel
-    Left = 197
+    Left = 232
     Height = 13
     Top = 40
     Width = 34
@@ -437,14 +438,22 @@ object Form2: TForm2
     ParentColor = False
   end
   object memEditColorButton: TColorButton
-    Left = 314
+    Left = 334
     Height = 21
     Top = 36
-    Width = 75
+    Width = 55
     BorderWidth = 2
     ButtonColorSize = 16
     ButtonColor = clBlack
     ColorDialog = memEditColorDialog
+  end
+  object MemTabComboBox: TComboBox
+    Left = 116
+    Height = 21
+    Top = 36
+    Width = 96
+    ItemHeight = 13
+    TabOrder = 15
   end
   object DataSource1: TDataSource
     DataSet = SQLQuery1
@@ -488,6 +497,7 @@ object Form2: TForm2
     end
     object memwdelAction: TAction
       Caption = 'memwdelAction'
+      OnExecute = memwdelActionExecute
     end
   end
   object memEditColorDialog: TColorDialog
