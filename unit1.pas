@@ -985,7 +985,7 @@ begin
       SetLength(CurTabKeyArray, k + 1);
     end;
     SQLQuery12.Next;
-    i := i + 1;
+//    i := i + 1;
   end;
   CurTabKeyArray[k] := -1;
 
@@ -996,6 +996,7 @@ begin
     SQLQuery12.SQL.Clear;
     SQLQuery12.SQL.Add('delete from memtabs where key='+IntToStr(CurTabKeyArray[k])+';');
     SQLQuery12.ExecSQL;
+    k := k + 1;
   end;
 
   SQLQuery12.Close;
