@@ -190,16 +190,17 @@ begin
   memEditBreefEdit.Text+''', '''+
   Memo1String+''', '''+
   ExpStr+''', '+
-  IntToStr(Integer(memEditDoneCheckBox.Checked))+
+  IntToStr(Integer(memEditDoneCheckBox.Checked))+', '+
   IntToStr(memEditPrioritySpinEdit.Value)+', '+
   IntToStr(Red(memEditColorButton.ButtonColor))+', '+
   IntToStr(Green(memEditColorButton.ButtonColor))+', '+
   IntToStr(Blue(memEditColorButton.ButtonColor))+', '+
-  IntToStr(i)+', '+
+  IntToStr(i)+
   ');';
   SqlString := 'INSERT INTO mem'+SqlString;
 
-  memEditTempLabel.Caption:=SqlString;
+//  memEditTempLabel.Caption:=SqlString;
+//  memEditMemo.Text := SqlString;
 
   SQLQuery1.Close;
   SQLQuery1.SQL.Clear;
