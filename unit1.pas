@@ -469,15 +469,16 @@ procedure TForm1.BitBtn27Click(Sender: TObject);
 var
   i: Integer;
 begin
-  for i := MemTabsStringGrid.Row to MemTabsStringGrid.RowCount - 2 do
   if(MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row] = '0') or
-    (MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row] = '') then begin
-
-    MemTabsStringGrid.Cells[0,i] := MemTabsStringGrid.Cells[0,i+1];
-    MemTabsStringGrid.Cells[1,i] := MemTabsStringGrid.Cells[1,i+1];
-    MemTabsStringGrid.Cells[2,i] := MemTabsStringGrid.Cells[2,i+1];
-    MemTabsStringGrid.Cells[3,i] := MemTabsStringGrid.Cells[3,i+1];
-
+    (MemTabsStringGrid.Cells[3,MemTabsStringGrid.Row] = '') then
+  begin
+    for i := MemTabsStringGrid.Row to MemTabsStringGrid.RowCount - 2 do
+    begin
+      MemTabsStringGrid.Cells[0,i] := MemTabsStringGrid.Cells[0,i+1];
+      MemTabsStringGrid.Cells[1,i] := MemTabsStringGrid.Cells[1,i+1];
+      MemTabsStringGrid.Cells[2,i] := MemTabsStringGrid.Cells[2,i+1];
+      MemTabsStringGrid.Cells[3,i] := MemTabsStringGrid.Cells[3,i+1];
+    end;
     MemTabsStringGrid.RowCount := MemTabsStringGrid.RowCount - 1;
   end;
 end;
@@ -962,6 +963,10 @@ begin
   k := 0;
   SetLength(CurTabKeyArray, k + 1);
   CurTabKeyArray[k] := -1;
+//  for i := 0 to MemTabsStringGrid.RowCount - 1 do
+//  begin
+//    MemTabsStringGrid.Cells[2,i] := IntToStr(i);
+//  end;
   SQLQuery12.Close;
   SQLQuery12.SQL.Clear;
   SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs;');
@@ -992,6 +997,11 @@ begin
     SQLQuery12.SQL.Add('delete from memtabs where key='+IntToStr(CurTabKeyArray[k])+';');
     SQLQuery12.ExecSQL;
   end;
+
+  SQLQuery12.Close;
+  SQLQuery12.SQL.Clear;
+  SQLQuery12.SQL.Add('update memtabs set "order" = 0-"key";');
+  SQLQuery12.ExecSQL;
   SQLite3Connection1.Transaction.Commit;
 
   for i := 0 to MemTabsStringGrid.RowCount - 1 do
@@ -1010,7 +1020,7 @@ begin
     begin
       SqlString := 'update memtabs set "order" = '+IntToStr(i)+
       ', name = '''+MemTabsStringGrid.Cells[0,i]+
-      ''' where key = '+MemTabsStringGrid.Cells[1,i]+';';
+      ''' where "key" = '+MemTabsStringGrid.Cells[1,i]+';';
     end;
     SQLQuery12.Close;
     SQLQuery12.SQL.Clear;
@@ -1767,6 +1777,7 @@ begin
 //  Form1.MemTabsStringGrid.RowCount := 0;
   Form1.MemTabsStringGrid.Clear;
   Form2.MemTabComboBox.Items.Clear;
+  Form1.TabControl1.Tabs.Clear;
   Form1.SQLQuery12.Close;
   Form1.SQLQuery12.SQL.Clear;
   Form1.SQLQuery12.SQL.Add('SELECT name, "key", "order", function FROM memtabs order by "order";');
