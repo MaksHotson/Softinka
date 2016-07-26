@@ -21,6 +21,8 @@ type
     BitBtn25: TBitBtn;
     BitBtn26: TBitBtn;
     BitBtn27: TBitBtn;
+    Button1: TButton;
+    Label2: TLabel;
     MemTabsSaveToDBButton: TButton;
     MemTabDnButton: TButton;
     MemTabUpButton: TButton;
@@ -452,7 +454,8 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  Application.Terminate;
+  Label2.Caption := 'SELECT key, expiration FROM mem WHERE expiration < date('+'''now'''+') AND done = 0;';
+//  Application.Terminate;
 end;
 
 procedure TForm1.BitBtn26Click(Sender: TObject);

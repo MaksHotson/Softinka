@@ -183,7 +183,7 @@ begin
   MaxKeyStr := IntToStr((StrToInt(SQLQuery1.FieldByName('mem_key').AsString)+1));
 
   ExpStr := FormatDateTime('yyyy-mm-dd', memEditExpirationDateEdit.Date);
-  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + '-' + IntToStr(memEditMinutesSpinEdit.Value);
+  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + ':' + IntToStr(memEditMinutesSpinEdit.Value)+':00';
   Memo1String := DelChars(DelChars(memEditMemo.Lines.Text, #13), #10);
   SqlString := ' (key, breef, text, expiration, done, priority, color_red, color_green, color_blue, tab_key) VALUES ('''+
   MaxKeyStr+''', '''+
@@ -225,7 +225,7 @@ var
   DoneIntStr: string;
 begin
   ExpStr := FormatDateTime('yyyy-mm-dd', memEditExpirationDateEdit.Date);
-  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + '-' + IntToStr(memEditMinutesSpinEdit.Value);
+  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + ':' + IntToStr(memEditMinutesSpinEdit.Value) + ':00';
   Memo1String := DelChars(DelChars(memEditMemo.Lines.Text, #13), #10);
   if(memEditDoneCheckBox.Checked) then DoneIntStr := '1'
   else DoneIntStr := '0';
@@ -274,7 +274,10 @@ var
 begin
   mems_len := 0;
   mems_ind := 0;
-  SqlString := 'SELECT key, expiration FROM mem WHERE expiration < date('+'''now'''+') AND done = 0;';
+//  SqlString := 'SELECT "key", expiration FROM mem WHERE expiration < date('+'''now'''+') AND done == '''+'0'+''';';
+//  SqlString := 'select "key", expiration, done from mem where (expiration < date('+'''now'''+')) and (done = 0);';
+  SqlString := 'select "key" from mem where (expiration < date('+'''now'''+')) and (done is not 1);';
+//  SqlString := 'SELECT "key", expiration FROM mem WHERE expiration < date('+'''now'''+');';
   SQLQuery1.Close;
   SQLQuery1.SQL.Clear;
   SQLQuery1.SQL.Add(SqlString);
