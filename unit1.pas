@@ -332,6 +332,11 @@ begin
   SQLQuery1.Close;
   SQLQuery1.SQL.Clear;
   SQLQuery1.SQL.Add('select * from mem;');
+//  SQLQuery1.SQL.Add('select expiration, datetime('''+'now'+''') from mem;');
+//  SQLQuery1.SQL.Add('select date('''+'now'+''');');
+//  SQLQuery1.SQL.Add('select date("now");');
+//  SQLQuery1.SQL.Add('select strftime('''+'%s'+''','''+'now'+''');');
+//  SQLQuery1.SQL.Add('select '''+'26'+''';');
   SQLQuery1.Open;
   SQLQuery8.Close;
   SQLQuery8.SQL.Clear;
