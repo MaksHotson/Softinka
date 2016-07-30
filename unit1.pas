@@ -756,7 +756,7 @@ begin
 //      + ', cur_date = ' + FormatDateTime('DD-MM-YYYY', DateTimePicker1.Date)
       + ', cur_date = ''' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date)
       + ''', nowork_key = ' + IntToStr(taskkey)
-      + ', task_key = ' + 'null'
+      + ', task_desc_key = ' + 'null'
       + ' where key = ' + IntToStr(TempKey)
       + ';');
     end else begin

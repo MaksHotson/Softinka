@@ -16,6 +16,7 @@ type
   TForm2 = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
+    DateTimePicker1: TDateTimePicker;
     MemTabComboBox: TComboBox;
     memEditColorButton: TColorButton;
     memEditColorDialog: TColorDialog;
@@ -183,7 +184,8 @@ begin
   MaxKeyStr := IntToStr((StrToInt(SQLQuery1.FieldByName('mem_key').AsString)+1));
 
   ExpStr := FormatDateTime('YYYY-MM-DD', memEditExpirationDateEdit.Date);
-  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + ':' + IntToStr(memEditMinutesSpinEdit.Value)+':00';
+//  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + ':' + IntToStr(memEditMinutesSpinEdit.Value)+':00';
+  ExpStr := ExpStr + ' ' + Format('%2d', [memEditHoursSpinEdit.Value]) + ':' + Format('%2d', [memEditMinutesSpinEdit.Value]) + ':00';
   Memo1String := DelChars(DelChars(memEditMemo.Lines.Text, #13), #10);
   SqlString := ' (key, breef, text, expiration, done, priority, color_red, color_green, color_blue, tab_key) VALUES ('''+
   MaxKeyStr+''', '''+
@@ -225,7 +227,8 @@ var
   DoneIntStr: string;
 begin
   ExpStr := FormatDateTime('YYYY-MM-DD', memEditExpirationDateEdit.Date);
-  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + ':' + IntToStr(memEditMinutesSpinEdit.Value) + ':00';
+//  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + ':' + IntToStr(memEditMinutesSpinEdit.Value) + ':00';
+  ExpStr := ExpStr + ' ' + Format('%2d', [memEditHoursSpinEdit.Value]) + ':' + Format('%2d', [memEditMinutesSpinEdit.Value]) + ':00';
   Memo1String := DelChars(DelChars(memEditMemo.Lines.Text, #13), #10);
   if(memEditDoneCheckBox.Checked) then DoneIntStr := '1'
   else DoneIntStr := '0';
@@ -277,7 +280,7 @@ begin
 //  SqlString := 'SELECT "key", expiration FROM mem WHERE expiration < date('+'''now'''+') AND done == '''+'0'+''';';
 //  SqlString := 'select "key" from mem where "done" = 0;';
 //  SqlString := 'select "key" from mem where (expiration < date('+'''now'''+')) and ("done" = 0);';
-  SqlString := 'select "key" from mem where (expiration < date('+'''now'''+')) and done = 0;';
+  SqlString := 'select "key" from mem where (expiration < datetime('+'''now'''+', '+'''localtime'''+')) and done = 0;';
 //  SqlString := 'select "key" from mem where (expiration < date('+'''now'''+')) and tab_key = 1;';
 //  SqlString := 'SELECT "key", expiration FROM mem WHERE expiration < datetime('+'''now'''+');';
   SQLQuery1.Close;

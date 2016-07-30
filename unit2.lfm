@@ -73,12 +73,10 @@ object Form2: TForm2
     Top = 87
     Width = 103
     CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
-    OKCaption = 'OK'
     CancelCaption = 'Cancel'
     DefaultToday = True
     DateOrder = doNone
     ButtonWidth = 23
-    DirectInput = False
     NumGlyphs = 1
     MaxLength = 0
     TabOrder = 4
@@ -454,6 +452,28 @@ object Form2: TForm2
     Width = 96
     ItemHeight = 13
     TabOrder = 15
+  end
+  object DateTimePicker1: TDateTimePicker
+    Left = 197
+    Height = 21
+    Top = 64
+    Width = 81
+    CenturyFrom = 1941
+    MaxDate = 2958465
+    MinDate = -53780
+    TabOrder = 16
+    TrailingSeparator = False
+    TextForNullDate = 'NULL'
+    LeadingZeros = True
+    Kind = dtkDate
+    TimeFormat = tf24
+    TimeDisplay = tdHMS
+    DateMode = dmComboBox
+    Date = 42581
+    Time = 0.46912878472358
+    UseDefaultSeparators = True
+    HideDateTimeParts = []
+    MonthNames = 'Long'
   end
   object DataSource1: TDataSource
     DataSet = SQLQuery1
