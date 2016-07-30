@@ -73,6 +73,7 @@ object Form2: TForm2
     Top = 87
     Width = 103
     CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+    OKCaption = 'OK'
     CancelCaption = 'Cancel'
     DefaultToday = True
     DateOrder = doNone

@@ -277,12 +277,7 @@ var
 begin
   mems_len := 0;
   mems_ind := 0;
-//  SqlString := 'SELECT "key", expiration FROM mem WHERE expiration < date('+'''now'''+') AND done == '''+'0'+''';';
-//  SqlString := 'select "key" from mem where "done" = 0;';
-//  SqlString := 'select "key" from mem where (expiration < date('+'''now'''+')) and ("done" = 0);';
   SqlString := 'select "key" from mem where (expiration < datetime('+'''now'''+', '+'''localtime'''+')) and done = 0;';
-//  SqlString := 'select "key" from mem where (expiration < date('+'''now'''+')) and tab_key = 1;';
-//  SqlString := 'SELECT "key", expiration FROM mem WHERE expiration < datetime('+'''now'''+');';
   SQLQuery1.Close;
   SQLQuery1.SQL.Clear;
   SQLQuery1.SQL.Add(SqlString);

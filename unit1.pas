@@ -332,11 +332,6 @@ begin
   SQLQuery1.Close;
   SQLQuery1.SQL.Clear;
   SQLQuery1.SQL.Add('select * from mem;');
-//  SQLQuery1.SQL.Add('select expiration, datetime('''+'now'+''') from mem;');
-//  SQLQuery1.SQL.Add('select date('''+'now'+''');');
-//  SQLQuery1.SQL.Add('select date("now");');
-//  SQLQuery1.SQL.Add('select strftime('''+'%s'+''','''+'now'+''');');
-//  SQLQuery1.SQL.Add('select '''+'26'+''';');
   SQLQuery1.Open;
   SQLQuery8.Close;
   SQLQuery8.SQL.Clear;
@@ -603,11 +598,9 @@ var
 begin
   CurKey := DBGrid6.DataSource.DataSet.FieldByName('dkey').AsInteger;
   if(diatskEdit.Visible) then
-//  if(diatskDBLCBEdited) then
     begin
       SQLQuery7.Close;
       SQLQuery7.SQL.Clear;
-//      SQLQuery7.SQL.Add('select * from task_desc where text = ''' + diatskDBLookupComboBox.Caption + ''';');
       SQLQuery7.SQL.Add('select * from task_desc where text = ''' + diatskEdit.Text + ''';');
       SQLQuery7.Open;
       if SQLQuery7.IsEmpty then
@@ -638,7 +631,6 @@ begin
   Form1.SQLQuery8.SQL.Clear;
 
   if(RadioButton2.Checked) then
-//  if(diatskDBLookupComboBox.ListField = 'reason') then
     begin
       Form1.SQLQuery8.SQL.Add('insert into diary_record (hours, people_key, cur_date, nowork_key) values ('
       + Edit1.Text + ', '
@@ -747,13 +739,10 @@ begin
   Form1.SQLQuery8.Close;
   Form1.SQLQuery8.SQL.Clear;
   if(RadioButton2.Checked) then
-//  if(diatskDBLookupComboBox.ListField = 'reason') then
     begin
       Form1.SQLQuery8.SQL.Add('update diary_record set '
       + 'hours = ' + Edit1.Text
       + ', people_key = ' + IntToStr(diasnDBLookupComboBox.KeyValue)
-//      + ', cur_date = ' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date)
-//      + ', cur_date = ' + FormatDateTime('DD-MM-YYYY', DateTimePicker1.Date)
       + ', cur_date = ''' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date)
       + ''', nowork_key = ' + IntToStr(taskkey)
       + ', task_desc_key = ' + 'null'
@@ -763,8 +752,6 @@ begin
       Form1.SQLQuery8.SQL.Add('update diary_record set '
       + 'hours = ' + Edit1.Text
       + ', people_key = ' + IntToStr(diasnDBLookupComboBox.KeyValue)
-//      + ', cur_date = ' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date)
-//      + ', cur_date = ' + FormatDateTime('DD-MM-YYYY', DateTimePicker1.Date)
       + ', cur_date = ''' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date)
       + ''', nowork_key = ' + 'null'
       + ', task_desc_key = ' + IntToStr(taskkey)
@@ -1402,30 +1389,26 @@ end;
 
 procedure TForm1.RadioButton5Click(Sender: TObject);
 var
-//  TmpDate: TDateTime;
   TmpDateStr: String;
-//  TmpPeopleKey: Integer;
-//  TmpPeopleKeyStr: String;
   FS: TFormatSettings;
 begin
   FS:=DefaultFormatSettings;
   FS.DateSeparator:='-';
   FS.ShortDateFormat:='yyyy-mm-dd';
-//  TmpDate :=  StrToDate(DbGrid6.DataSource.DataSet.FieldByName('diary_record.cur_date').AsString, FS);
   TmpDateStr :=  DbGrid6.DataSource.DataSet.FieldByName('diary_record.cur_date').AsString;
-//  TmpPeopleKey := DbGrid6.DataSource.DataSet.FieldByName('diary_record.people_key').AsInteger;
-//  TmpPeopleKeyStr := DbGrid6.DataSource.DataSet.FieldByName('diary_record.people_key').AsString;
   SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
   + 'from diary_record, people, task_desc '
   + 'where people."key"=diary_record.people_key '
   + 'and task_desc."key"=diary_record.task_desc_key '
-  + 'and diary_record.cur_date=''' + TmpDateStr + ''' '
+  + 'and (diary_record.cur_date=''' + TmpDateStr + ''' '
+  + 'or diary_record.cur_date=''' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date) + ''') '
   + 'union all '
   + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
   + 'from diary_record, people, nowork '
   + 'where people."key"=diary_record.people_key '
   + 'and nowork."key"=diary_record.nowork_key '
-  + 'and diary_record.cur_date=''' + TmpDateStr + ''' '
+  + 'and (diary_record.cur_date=''' + TmpDateStr + ''' '
+  + 'or diary_record.cur_date=''' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date) + ''') '
   + 'order by diary_record.cur_date desc, people.surname asc;';
   SQLQuery8.Close;
   SQLQuery8.SQL.Clear;
@@ -1611,7 +1594,11 @@ begin
   else begin
     SQLQuery1.Close;
     SQLQuery1.SQL.Clear;
-    SQLQuery1.SQL.Add('select * from mem where tab_key = ' + MemTabsStringGrid.Cells[1,i] + ';');
+//    SQLQuery1.SQL.Add('select * from mem where tab_key = ' + MemTabsStringGrid.Cells[1,i] + ';');
+    SQLQuery1.SQL.Add('select * from mem where '
+    + 'tab_key = ' + MemTabsStringGrid.Cells[2,i]
+    + ' and done = 0'
+    + ';');
     SQLQuery1.Open;
   end;
 end;
