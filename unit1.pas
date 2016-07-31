@@ -401,8 +401,9 @@ begin
       if(MemTabsStringGrid.Cells[3,j] = '1') then
         CurTabKey := j;
     TabControl1.TabIndex := CurTabKey;
-    TabControl1Change(Sender);
+//    TabControl1Change(Sender);
   end;
+  TabControl1Change(Sender);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

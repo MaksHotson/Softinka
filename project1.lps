@@ -19,12 +19,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <TopLine Value="1575"/>
-        <CursorPos X="13" Y="1600"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="387"/>
+        <CursorPos X="3" Y="404"/>
         <UsageCount Value="217"/>
         <Bookmarks Count="2">
-          <Item0 Y="475" ID="1"/>
-          <Item1 Y="1399"/>
+          <Item0 Y="476" ID="1"/>
+          <Item1 Y="1400"/>
         </Bookmarks>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -36,7 +37,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit2"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="235"/>
         <CursorPos X="73" Y="253"/>
