@@ -1,7 +1,7 @@
 object Form2: TForm2
-  Left = 998
+  Left = 1248
   Height = 295
-  Top = 334
+  Top = 378
   Width = 395
   Caption = 'Mem Edit'
   ClientHeight = 295
@@ -44,9 +44,9 @@ object Form2: TForm2
     Visible = False
   end
   object memEditIntervalListBox: TListBox
-    Left = 5
+    Left = 32
     Height = 72
-    Top = 36
+    Top = 152
     Width = 100
     Items.Strings = (
       '5 минут'
@@ -66,11 +66,12 @@ object Form2: TForm2
     ItemHeight = 13
     OnSelectionChange = memEditIntervalListBoxSelectionChange
     TabOrder = 3
+    Visible = False
   end
   object memEditExpirationDateEdit: TDateEdit
-    Left = 197
+    Left = 88
     Height = 21
-    Top = 87
+    Top = 176
     Width = 103
     CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
     OKCaption = 'OK'
@@ -81,6 +82,7 @@ object Form2: TForm2
     NumGlyphs = 1
     MaxLength = 0
     TabOrder = 4
+    Visible = False
     Text = '16.07.2016'
   end
   object memEditHoursSpinEdit: TSpinEdit
@@ -149,9 +151,9 @@ object Form2: TForm2
     Visible = False
   end
   object memEditExpirationDateTimePicker: TDateTimePicker
-    Left = 160
+    Left = 216
     Height = 21
-    Top = 192
+    Top = 87
     Width = 81
     CenturyFrom = 1941
     MaxDate = 2958465
@@ -160,7 +162,6 @@ object Form2: TForm2
     TrailingSeparator = False
     TextForNullDate = 'NULL'
     LeadingZeros = True
-    Visible = False
     Kind = dtkDate
     TimeFormat = tf24
     TimeDisplay = tdHMS
@@ -454,27 +455,18 @@ object Form2: TForm2
     ItemHeight = 13
     TabOrder = 15
   end
-  object DateTimePicker1: TDateTimePicker
-    Left = 197
-    Height = 21
-    Top = 64
-    Width = 81
-    CenturyFrom = 1941
-    MaxDate = 2958465
-    MinDate = -53780
+  object memEditIntervalDBLookupListBox: TDBLookupListBox
+    Left = 5
+    Height = 72
+    Top = 36
+    Width = 106
+    KeyField = 'key'
+    ListField = 'name'
+    ListFieldIndex = 0
+    ListSource = DataSource2
+    LookupCache = False
+    OnClick = memEditIntervalDBLookupListBoxClick
     TabOrder = 16
-    TrailingSeparator = False
-    TextForNullDate = 'NULL'
-    LeadingZeros = True
-    Kind = dtkDate
-    TimeFormat = tf24
-    TimeDisplay = tdHMS
-    DateMode = dmComboBox
-    Date = 42581
-    Time = 0.46912878472358
-    UseDefaultSeparators = True
-    HideDateTimeParts = []
-    MonthNames = 'Long'
   end
   object DataSource1: TDataSource
     DataSet = SQLQuery1
@@ -547,5 +539,33 @@ object Form2: TForm2
     )
     left = 336
     top = 40
+  end
+  object DataSource2: TDataSource
+    DataSet = SQLQuery2
+    left = 107
+    top = 197
+  end
+  object SQLQuery2: TSQLQuery
+    FieldDefs = <>
+    Database = Form1.SQLite3Connection1
+    Transaction = Form1.SQLTransaction1
+    Options = []
+    Params = <>
+    left = 52
+    top = 197
+  end
+  object SQLQuery3: TSQLQuery
+    FieldDefs = <>
+    Database = Form1.SQLite3Connection1
+    Transaction = Form1.SQLTransaction1
+    Options = []
+    Params = <>
+    left = 175
+    top = 221
+  end
+  object DataSource3: TDataSource
+    DataSet = SQLQuery3
+    left = 221
+    top = 221
   end
 end

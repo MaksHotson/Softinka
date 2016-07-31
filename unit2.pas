@@ -16,7 +16,9 @@ type
   TForm2 = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    DateTimePicker1: TDateTimePicker;
+    DataSource2: TDataSource;
+    DataSource3: TDataSource;
+    memEditIntervalDBLookupListBox: TDBLookupListBox;
     MemTabComboBox: TComboBox;
     memEditColorButton: TColorButton;
     memEditColorDialog: TColorDialog;
@@ -45,12 +47,15 @@ type
     memEditHoursSpinEdit: TSpinEdit;
     memEditMinutesSpinEdit: TSpinEdit;
     SQLQuery1: TSQLQuery;
+    SQLQuery2: TSQLQuery;
+    SQLQuery3: TSQLQuery;
     Timer1: TTimer;
     Timer2: TTimer;
     ToolBar6: TToolBar;
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure memEditDiscardButtonClick(Sender: TObject);
+    procedure memEditIntervalDBLookupListBoxClick(Sender: TObject);
     procedure memEditIntervalListBoxSelectionChange(Sender: TObject;
       User: boolean);
     procedure memEditNewButtonClick(Sender: TObject);
@@ -79,12 +84,15 @@ uses
 
 var
   i: Integer;
+  filled: Boolean;
 
 {$R *.lfm}
 
 { TForm2 }
 
 procedure TForm2.FormActivate(Sender: TObject);
+var
+  SqlString: string;
 begin
   BitBtn1.Caption := '';
   BitBtn2.Caption := '';
@@ -92,7 +100,16 @@ begin
   BitBtn17.Caption := '';
   BitBtn18.Caption := '';
 
-  if(NewMemRec = False)
+//  if(filled = False) then begin
+    SqlString := 'select * from interval order by "order";';
+    SQLQuery2.Close;
+    SQLQuery2.SQL.Clear;
+    SQLQuery2.SQL.Add(SqlString);
+    SQLQuery2.Open;
+//  end;
+  filled := True;
+
+if(NewMemRec = False)
   then begin
 //    memEditEditButton.Visible := True;
     memEditEditButton.Caption := 'Save Edt';
@@ -130,6 +147,8 @@ begin
                                                    Byte(SQLQuery1.FieldByName('color_blue').AsInteger))
     else
       memEditColorButton.ButtonColor := clBtnFace;
+    SQLQuery2.Locate('key', SQLQuery1.FieldByName('interval').AsVariant, []);
+    memEditIntervalDBLookupListBox.ItemIndex := memEditIntervalDBLookupListBox.Items.IndexOf(SQLQuery2.FieldByName('name').AsString);
   end
   else begin
     memEditExpirationDateEdit.Date := Today;
@@ -140,6 +159,8 @@ begin
     memEditNewButton.Caption := 'Save';
     memEditBreefEdit.Text := '';
     Form2.Color := clDefault;
+    SQLQuery2.First;
+    memEditIntervalDBLookupListBox.ItemIndex := 0;
   end;
 
   i := 0;
@@ -166,6 +187,7 @@ procedure TForm2.FormCreate(Sender: TObject);
 begin
   CurMemKey := 0;
   NewMemRec := True;
+  filled := False;
 end;
 
 procedure TForm2.memwaddActionExecute(Sender: TObject);
@@ -183,11 +205,11 @@ begin
   SQLQuery1.Open;
   MaxKeyStr := IntToStr((StrToInt(SQLQuery1.FieldByName('mem_key').AsString)+1));
 
-  ExpStr := FormatDateTime('YYYY-MM-DD', memEditExpirationDateEdit.Date);
-//  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + ':' + IntToStr(memEditMinutesSpinEdit.Value)+':00';
+//  ExpStr := FormatDateTime('YYYY-MM-DD', memEditExpirationDateEdit.Date);
+  ExpStr := FormatDateTime('YYYY-MM-DD', memEditExpirationDateTimePicker.Date);
   ExpStr := ExpStr + ' ' + Format('%2d', [memEditHoursSpinEdit.Value]) + ':' + Format('%2d', [memEditMinutesSpinEdit.Value]) + ':00';
   Memo1String := DelChars(DelChars(memEditMemo.Lines.Text, #13), #10);
-  SqlString := ' (key, breef, text, expiration, done, priority, color_red, color_green, color_blue, tab_key) VALUES ('''+
+  SqlString := ' (key, breef, text, expiration, done, priority, color_red, color_green, color_blue, tab_key, interval) VALUES ('''+
   MaxKeyStr+''', '''+
   memEditBreefEdit.Text+''', '''+
   Memo1String+''', '''+
@@ -197,7 +219,8 @@ begin
   IntToStr(Red(memEditColorButton.ButtonColor))+', '+
   IntToStr(Green(memEditColorButton.ButtonColor))+', '+
   IntToStr(Blue(memEditColorButton.ButtonColor))+', '+
-  IntToStr(i)+
+  IntToStr(i)+', '+
+  IntToStr(memEditIntervalDBLookupListBox.KeyValue)+
   ');';
   SqlString := 'INSERT INTO mem'+SqlString;
 
@@ -226,8 +249,8 @@ var
   ExpStr: string;
   DoneIntStr: string;
 begin
-  ExpStr := FormatDateTime('YYYY-MM-DD', memEditExpirationDateEdit.Date);
-//  ExpStr := ExpStr + ' ' + IntToStr(memEditHoursSpinEdit.Value) + ':' + IntToStr(memEditMinutesSpinEdit.Value) + ':00';
+//  ExpStr := FormatDateTime('YYYY-MM-DD', memEditExpirationDateEdit.Date);
+  ExpStr := FormatDateTime('YYYY-MM-DD', memEditExpirationDateTimePicker.Date);
   ExpStr := ExpStr + ' ' + Format('%2d', [memEditHoursSpinEdit.Value]) + ':' + Format('%2d', [memEditMinutesSpinEdit.Value]) + ':00';
   Memo1String := DelChars(DelChars(memEditMemo.Lines.Text, #13), #10);
   if(memEditDoneCheckBox.Checked) then DoneIntStr := '1'
@@ -243,6 +266,7 @@ begin
   ', color_green = '+IntToStr(Green(memEditColorButton.ButtonColor))+
   ', color_blue = '+IntToStr(Blue(memEditColorButton.ButtonColor))+
   ', tab_key = '+IntToStr(i)+
+  ', interval = '+IntToStr(memEditIntervalDBLookupListBox.KeyValue)+
   ' WHERE key='+IntToStr(CurMemKey)+';';
 
   memEditTempLabel.Caption:=SqlString;
@@ -322,6 +346,30 @@ end;
 procedure TForm2.memEditDiscardButtonClick(Sender: TObject);
 begin
   Form2.Close;
+end;
+
+procedure TForm2.memEditIntervalDBLookupListBoxClick(Sender: TObject);
+var
+  exp_time: TDateTime;
+  SqlString: String;
+begin
+  SqlString := 'select * from interval where "key" = ' + IntToStr(memEditIntervalDBLookupListBox.KeyValue) + ';';
+  SQLQuery3.Close;
+  SQLQuery3.SQL.Clear;
+  SQLQuery3.SQL.Add(SqlString);
+  SQLQuery3.Open;
+
+  if(SQLQuery3.FieldByName('minuts').AsInteger > 0) then exp_time := IncMinute(now, SQLQuery3.FieldByName('minuts').AsInteger);
+  if(SQLQuery3.FieldByName('hours').AsInteger > 0) then exp_time := IncHour(now, SQLQuery3.FieldByName('hours').AsInteger);
+  if(SQLQuery3.FieldByName('days').AsInteger > 0) then exp_time := IncDay(now, SQLQuery3.FieldByName('days').AsInteger);
+  if(SQLQuery3.FieldByName('weeks').AsInteger > 0) then exp_time := IncWeek(now, SQLQuery3.FieldByName('weeks').AsInteger);
+  if(SQLQuery3.FieldByName('months').AsInteger > 0) then exp_time := IncMonth(now, SQLQuery3.FieldByName('months').AsInteger);
+  if(SQLQuery3.FieldByName('years').AsInteger > 0) then exp_time := IncYear(now, SQLQuery3.FieldByName('years').AsInteger);
+
+  memEditExpirationDateEdit.Date := exp_time;
+  memEditExpirationDateTimePicker.Date := exp_time;
+  memEditHoursSpinEdit.Value := HourOf(exp_time);
+  memEditMinutesSpinEdit.Value := MinuteOf(exp_time);
 end;
 
 procedure TForm2.BitBtn1Click(Sender: TObject);
