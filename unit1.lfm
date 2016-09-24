@@ -1,11 +1,13 @@
 object Form1: TForm1
-  Left = 756
+  Left = 686
   Height = 409
-  Top = 246
+  Top = 187
   Width = 934
   Caption = 'nanoBoss'
   ClientHeight = 409
   ClientWidth = 934
+  Constraints.MaxWidth = 934
+  Constraints.MinWidth = 934
   OnActivate = FormActivate
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
@@ -147,17 +149,22 @@ object Form1: TForm1
           Align = alClient
           TabOrder = 1
           object Panel2: TPanel
+            AnchorSideBottom.Control = TabControl1
+            AnchorSideBottom.Side = asrBottom
             Left = 0
-            Height = 331
+            Height = 327
             Top = 21
             Width = 928
+            Anchors = [akTop, akLeft, akBottom]
             Caption = 'Panel2'
-            ClientHeight = 331
+            ClientHeight = 327
             ClientWidth = 928
             TabOrder = 1
             object DBGrid1: TDBGrid
+              AnchorSideBottom.Control = Panel2
+              AnchorSideBottom.Side = asrBottom
               Left = 6
-              Height = 319
+              Height = 315
               Top = 6
               Width = 916
               Align = alClient
@@ -440,7 +447,7 @@ object Form1: TForm1
         Left = 6
         Height = 21
         Top = 36
-        Width = 81
+        Width = 79
         CenturyFrom = 1941
         MaxDate = 2958465
         MinDate = -53780
@@ -488,10 +495,14 @@ object Form1: TForm1
         TabOrder = 3
       end
       object DBGrid6: TDBGrid
+        AnchorSideBottom.Control = TabSheet7
+        AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 312
+        Height = 314
         Top = 64
         Width = 914
+        Anchors = [akTop, akLeft, akBottom]
+        BorderSpacing.Bottom = 5
         Color = clWindow
         Columns = <>
         DataSource = DataSource8
@@ -957,11 +968,15 @@ object Form1: TForm1
         TabOrder = 2
       end
       object ppledtDBGrid: TDBGrid
+        AnchorSideBottom.Control = TabSheet11
+        AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 304
+        Height = 306
         Top = 72
         Width = 395
+        Anchors = [akTop, akLeft, akBottom]
         AutoEdit = False
+        BorderSpacing.Bottom = 5
         Color = clWindow
         Columns = <>
         DataSource = DataSource2
@@ -1123,7 +1138,7 @@ object Form1: TForm1
         Left = 416
         Height = 21
         Top = 40
-        Width = 81
+        Width = 79
         CenturyFrom = 1941
         MaxDate = 2958465
         MinDate = -53780
@@ -1146,7 +1161,7 @@ object Form1: TForm1
         Left = 835
         Height = 21
         Top = 40
-        Width = 81
+        Width = 79
         CenturyFrom = 1941
         MaxDate = 2958465
         MinDate = -53780
@@ -1166,10 +1181,14 @@ object Form1: TForm1
         OnChange = DateTimePicker3Change
       end
       object ppltsksDBGrid: TDBGrid
+        AnchorSideBottom.Control = TabSheet11
+        AnchorSideBottom.Side = asrBottom
         Left = 416
-        Height = 304
+        Height = 306
         Top = 72
         Width = 500
+        Anchors = [akTop, akLeft, akBottom]
+        BorderSpacing.Bottom = 5
         Color = clWindow
         Columns = <>
         DataSource = DataSource11

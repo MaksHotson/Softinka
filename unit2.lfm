@@ -1,7 +1,7 @@
 object Form2: TForm2
-  Left = 1248
+  Left = 1202
   Height = 295
-  Top = 378
+  Top = 448
   Width = 395
   Caption = 'Mem Edit'
   ClientHeight = 295
@@ -15,10 +15,14 @@ object Form2: TForm2
   OnCreate = FormCreate
   LCLVersion = '1.6.0.4'
   object memEditMemo: TMemo
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 5
-    Height = 152
+    Height = 154
     Top = 136
     Width = 384
+    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Bottom = 5
     TabOrder = 0
   end
   object memEditDiscardButton: TButton
@@ -154,7 +158,7 @@ object Form2: TForm2
     Left = 216
     Height = 21
     Top = 87
-    Width = 81
+    Width = 79
     CenturyFrom = 1941
     MaxDate = 2958465
     MinDate = -53780
