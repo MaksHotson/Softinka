@@ -1264,7 +1264,7 @@ end;
 
 procedure Grid6Formating();
 begin
-  Form1.DBGrid6.Columns[0].Width := 80;
+  Form1.DBGrid6.Columns[0].Width := 90;
   Form1.DBGrid6.Columns[1].Width := 25;
   Form1.DBGrid6.Columns[2].Width := 100;
   Form1.DBGrid6.Columns[3].Width := Form1.DBGrid6.ClientWidth

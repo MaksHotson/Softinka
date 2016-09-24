@@ -6,6 +6,8 @@ object TaskDescEditForm: TTaskDescEditForm
   Caption = 'Task Description'
   ClientHeight = 295
   ClientWidth = 395
+  Font.Height = -13
+  Font.Name = 'Lucida Console'
   OnActivate = FormActivate
   OnCreate = FormCreate
   LCLVersion = '1.6.0.4'
@@ -230,20 +232,26 @@ object TaskDescEditForm: TTaskDescEditForm
     TabOrder = 3
   end
   object DBGrid1: TDBGrid
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 5
-    Height = 72
+    Height = 73
     Top = 216
     Width = 384
+    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Bottom = 6
     Color = clWindow
     Columns = <>
     DataSource = DataSource2
     TabOrder = 4
+    TitleFont.Height = -13
+    TitleFont.Name = 'Lucida Console'
   end
   object Label1: TLabel
     Left = 8
     Height = 13
     Top = 192
-    Width = 31
+    Width = 48
     Caption = 'Label1'
     ParentColor = False
   end

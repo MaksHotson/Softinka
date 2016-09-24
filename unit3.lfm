@@ -10,9 +10,11 @@ object TaskEditForm: TTaskEditForm
   Constraints.MaxWidth = 395
   Constraints.MinHeight = 280
   Constraints.MinWidth = 395
+  Font.Height = -13
+  Font.Name = 'Lucida Console'
   OnActivate = FormActivate
   OnCreate = FormCreate
-  LCLVersion = '1.4.0.4'
+  LCLVersion = '1.6.0.4'
   object tskEditBreefEdit: TEdit
     Left = 5
     Height = 21
@@ -24,7 +26,7 @@ object TaskEditForm: TTaskEditForm
     Left = 5
     Height = 21
     Top = 36
-    Width = 81
+    Width = 105
     CenturyFrom = 1941
     MaxDate = 2958465
     MinDate = -53780
@@ -85,7 +87,7 @@ object TaskEditForm: TTaskEditForm
     Left = 128
     Height = 17
     Top = 40
-    Width = 45
+    Width = 52
     Caption = 'Done'
     TabOrder = 6
   end
@@ -93,7 +95,7 @@ object TaskEditForm: TTaskEditForm
     Left = 208
     Height = 17
     Top = 40
-    Width = 56
+    Width = 76
     Caption = 'Started'
     TabOrder = 7
   end
@@ -362,7 +364,7 @@ object TaskEditForm: TTaskEditForm
     Left = 304
     Height = 13
     Top = 40
-    Width = 34
+    Width = 64
     Caption = 'Priority'
     ParentColor = False
   end
@@ -393,6 +395,7 @@ object TaskEditForm: TTaskEditForm
     FieldDefs = <>
     Database = Form1.SQLite3Connection1
     Transaction = Form1.SQLTransaction1
+    Options = []
     Params = <>
     left = 248
     top = 128
@@ -414,6 +417,7 @@ object TaskEditForm: TTaskEditForm
     SQL.Strings = (
       'select * from people;'
     )
+    Options = []
     Params = <>
     left = 248
     top = 176
@@ -425,6 +429,7 @@ object TaskEditForm: TTaskEditForm
     SQL.Strings = (
       'select * from theme;'
     )
+    Options = []
     Params = <>
     left = 248
     top = 224

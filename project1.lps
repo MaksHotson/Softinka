@@ -19,9 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="387"/>
-        <CursorPos X="3" Y="404"/>
+        <TopLine Value="1260"/>
+        <CursorPos X="38" Y="1267"/>
         <UsageCount Value="217"/>
         <Bookmarks Count="2">
           <Item0 Y="476" ID="1"/>
@@ -37,6 +36,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit2"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="235"/>
         <CursorPos X="73" Y="253"/>

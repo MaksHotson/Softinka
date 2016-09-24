@@ -21,6 +21,9 @@ object Form1: TForm1
     Width = 934
     ActivePage = TabSheet7
     Align = alClient
+    Font.Height = 14
+    Font.Name = 'Lucida Console'
+    ParentFont = False
     TabIndex = 3
     TabOrder = 0
     object TabSheet1: TTabSheet
@@ -176,6 +179,8 @@ object Form1: TForm1
               DataSource = DataSource1
               Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
               TabOrder = 0
+              TitleFont.Height = 14
+              TitleFont.Name = 'Lucida Console'
               OnDrawColumnCell = DBGrid1DrawColumnCell
               OnDblClick = DBGrid1DblClick
               OnKeyDown = DBGrid1KeyDown
@@ -204,6 +209,8 @@ object Form1: TForm1
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
         PopupMenu = tskPopupMenu
         TabOrder = 0
+        TitleFont.Height = 14
+        TitleFont.Name = 'Lucida Console'
         OnDblClick = DBGrid5DblClick
       end
       object ToolBar2: TToolBar
@@ -424,6 +431,8 @@ object Form1: TForm1
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
         PopupMenu = tskdscPopupMenu
         TabOrder = 1
+        TitleFont.Height = 14
+        TitleFont.Name = 'Lucida Console'
         OnDblClick = DBGrid8DblClick
       end
     end
@@ -440,14 +449,16 @@ object Form1: TForm1
         FixedCols = 0
         FixedRows = 0
         TabOrder = 0
+        TitleFont.Height = 14
+        TitleFont.Name = 'Lucida Console'
         Visible = False
         OnPrepareCanvas = StringGrid1PrepareCanvas
       end
       object DateTimePicker1: TDateTimePicker
         Left = 6
-        Height = 21
+        Height = 22
         Top = 36
-        Width = 79
+        Width = 105
         CenturyFrom = 1941
         MaxDate = 2958465
         MinDate = -53780
@@ -466,7 +477,7 @@ object Form1: TForm1
         MonthNames = 'Long'
       end
       object diasnDBLookupComboBox: TDBLookupComboBox
-        Left = 144
+        Left = 160
         Height = 21
         Top = 36
         Width = 136
@@ -479,10 +490,10 @@ object Form1: TForm1
         TabOrder = 2
       end
       object diatskDBLookupComboBox: TDBLookupComboBox
-        Left = 296
+        Left = 304
         Height = 21
         Top = 36
-        Width = 624
+        Width = 616
         KeyField = 'key'
         ListField = 'breef'
         ListFieldIndex = 0
@@ -509,6 +520,8 @@ object Form1: TForm1
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
         PopupMenu = diaPopupMenu
         TabOrder = 4
+        TitleFont.Height = 14
+        TitleFont.Name = 'Lucida Console'
         OnDblClick = DBGrid6DblClick
       end
       object ToolBar3: TToolBar
@@ -672,10 +685,10 @@ object Form1: TForm1
           Visible = False
         end
         object RadioButton1: TRadioButton
-          Left = 494
-          Height = 17
+          Left = 532
+          Height = 18
           Top = 0
-          Width = 67
+          Width = 116
           Caption = 'work        '
           Checked = True
           OnChange = RadioButton1Change
@@ -684,20 +697,20 @@ object Form1: TForm1
           TabStop = True
         end
         object RadioButton2: TRadioButton
-          Left = 561
-          Height = 17
+          Left = 648
+          Height = 18
           Top = 0
-          Width = 64
+          Width = 92
           Caption = 'nowork   '
           OnChange = RadioButton2Change
           OnClick = RadioButton2Click
           TabOrder = 3
         end
         object RadioButton3: TRadioButton
-          Left = 625
-          Height = 17
+          Left = 740
+          Height = 18
           Top = 0
-          Width = 63
+          Width = 84
           Caption = 'new task'
           OnChange = RadioButton3Change
           OnClick = RadioButton3Click
@@ -712,7 +725,7 @@ object Form1: TForm1
           Style = tbsDivider
         end
         object ToolButton2: TToolButton
-          Left = 394
+          Left = 432
           Height = 22
           Top = 0
           Width = 100
@@ -721,44 +734,44 @@ object Form1: TForm1
         end
         object RadioButton4: TRadioButton
           Left = 268
-          Height = 17
+          Height = 18
           Top = 0
-          Width = 31
+          Width = 44
           Caption = 'All'
           OnClick = RadioButton4Click
           TabOrder = 6
         end
         object RadioButton5: TRadioButton
-          Left = 299
-          Height = 17
+          Left = 312
+          Height = 18
           Top = 0
-          Width = 43
+          Width = 52
           Caption = 'Date'
           OnClick = RadioButton5Click
           TabOrder = 7
         end
         object RadioButton6: TRadioButton
-          Left = 342
-          Height = 17
+          Left = 364
+          Height = 18
           Top = 0
-          Width = 52
+          Width = 68
           Caption = 'People'
           OnClick = RadioButton6Click
           TabOrder = 8
         end
       end
       object Edit1: TEdit
-        Left = 96
-        Height = 21
+        Left = 120
+        Height = 22
         Top = 36
         Width = 32
         TabOrder = 6
       end
       object diatskEdit: TEdit
-        Left = 296
-        Height = 21
+        Left = 304
+        Height = 22
         Top = 36
-        Width = 606
+        Width = 598
         PopupMenu = wnwPopupMenu
         TabOrder = 7
         Visible = False
@@ -925,6 +938,8 @@ object Form1: TForm1
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
         PopupMenu = diaPopupMenu
         TabOrder = 1
+        TitleFont.Height = 14
+        TitleFont.Name = 'Lucida Console'
       end
       object diatskDBLookupComboBox1: TDBLookupComboBox
         Left = 262
@@ -983,6 +998,8 @@ object Form1: TForm1
         FixedCols = 0
         Options = [dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
         TabOrder = 3
+        TitleFont.Height = 14
+        TitleFont.Name = 'Lucida Console'
         OnDblClick = ppledtDBGridDblClick
       end
       object ToolBar5: TToolBar
@@ -1195,6 +1212,8 @@ object Form1: TForm1
         FixedCols = 0
         Options = [dgTitles, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgDisableDelete, dgDisableInsert]
         TabOrder = 7
+        TitleFont.Height = 14
+        TitleFont.Name = 'Lucida Console'
       end
       object pplLabel: TLabel
         Left = 552
@@ -1241,6 +1260,8 @@ object Form1: TForm1
             FixedCols = 0
             Options = [dgEditing, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
             TabOrder = 1
+            TitleFont.Height = 14
+            TitleFont.Name = 'Lucida Console'
           end
           object ToolBar6: TToolBar
             Left = 5
@@ -1417,6 +1438,8 @@ object Form1: TForm1
             FixedCols = 0
             Options = [dgEditing, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
             TabOrder = 1
+            TitleFont.Height = 14
+            TitleFont.Name = 'Lucida Console'
           end
           object ToolBar4: TToolBar
             Left = 5
@@ -1788,6 +1811,8 @@ object Form1: TForm1
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect, goSmoothScroll]
             RowCount = 1
             TabOrder = 0
+            TitleFont.Height = 14
+            TitleFont.Name = 'Lucida Console'
             OnDblClick = MemTabsStringGridDblClick
           end
           object MemTabsEdit: TEdit

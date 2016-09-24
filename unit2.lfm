@@ -1,7 +1,7 @@
 object Form2: TForm2
-  Left = 1202
+  Left = 1157
   Height = 295
-  Top = 448
+  Top = 379
   Width = 395
   Caption = 'Mem Edit'
   ClientHeight = 295
@@ -10,6 +10,8 @@ object Form2: TForm2
   Constraints.MaxWidth = 395
   Constraints.MinHeight = 295
   Constraints.MinWidth = 395
+  Font.Height = -13
+  Font.Name = 'Lucida Console'
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -139,7 +141,7 @@ object Form2: TForm2
     Left = 116
     Height = 17
     Top = 87
-    Width = 45
+    Width = 52
     Caption = 'Done'
     TabOrder = 10
   end
@@ -158,7 +160,7 @@ object Form2: TForm2
     Left = 216
     Height = 21
     Top = 87
-    Width = 79
+    Width = 105
     CenturyFrom = 1941
     MaxDate = 2958465
     MinDate = -53780
@@ -420,7 +422,7 @@ object Form2: TForm2
     Left = 120
     Height = 13
     Top = 72
-    Width = 91
+    Width = 128
     Caption = 'memEditTempLabel'
     ParentColor = False
     Visible = False
@@ -437,7 +439,7 @@ object Form2: TForm2
     Left = 232
     Height = 13
     Top = 40
-    Width = 34
+    Width = 64
     Caption = 'Priority'
     ParentColor = False
   end
