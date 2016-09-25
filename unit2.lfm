@@ -1,7 +1,7 @@
 object Form2: TForm2
-  Left = 1157
+  Left = 1130
   Height = 295
-  Top = 379
+  Top = 310
   Width = 395
   Caption = 'Mem Edit'
   ClientHeight = 295
@@ -157,7 +157,7 @@ object Form2: TForm2
     Visible = False
   end
   object memEditExpirationDateTimePicker: TDateTimePicker
-    Left = 216
+    Left = 197
     Height = 21
     Top = 87
     Width = 105
@@ -428,7 +428,7 @@ object Form2: TForm2
     Visible = False
   end
   object memEditPrioritySpinEdit: TSpinEdit
-    Left = 272
+    Left = 288
     Height = 21
     Top = 36
     Width = 45
@@ -436,7 +436,7 @@ object Form2: TForm2
     TabOrder = 14
   end
   object memEditPriorityLabel: TLabel
-    Left = 232
+    Left = 216
     Height = 13
     Top = 40
     Width = 64
@@ -444,10 +444,10 @@ object Form2: TForm2
     ParentColor = False
   end
   object memEditColorButton: TColorButton
-    Left = 334
+    Left = 344
     Height = 21
     Top = 36
-    Width = 55
+    Width = 45
     BorderWidth = 2
     ButtonColorSize = 16
     ButtonColor = clBlack

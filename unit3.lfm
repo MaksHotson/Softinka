@@ -84,7 +84,7 @@ object TaskEditForm: TTaskEditForm
     Visible = False
   end
   object tskEditDoneCheckBox: TCheckBox
-    Left = 128
+    Left = 120
     Height = 17
     Top = 40
     Width = 52
@@ -92,7 +92,7 @@ object TaskEditForm: TTaskEditForm
     TabOrder = 6
   end
   object tskEditStartedCheckBox: TCheckBox
-    Left = 208
+    Left = 184
     Height = 17
     Top = 40
     Width = 76
@@ -361,7 +361,7 @@ object TaskEditForm: TTaskEditForm
     end
   end
   object tskEditPriorityLabel: TLabel
-    Left = 304
+    Left = 272
     Height = 13
     Top = 40
     Width = 64
