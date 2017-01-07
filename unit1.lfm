@@ -192,12 +192,12 @@ object Form1: TForm1
     end
     object TabSheet6: TTabSheet
       Caption = 'Tasks'
-      ClientHeight = 383
+      ClientHeight = 381
       ClientWidth = 926
       TabVisible = False
       object DBGrid5: TDBGrid
         Left = 5
-        Height = 342
+        Height = 340
         Top = 36
         Width = 916
         Align = alClient
@@ -438,7 +438,7 @@ object Form1: TForm1
     end
     object TabSheet7: TTabSheet
       Caption = 'Diary'
-      ClientHeight = 383
+      ClientHeight = 381
       ClientWidth = 926
       object StringGrid1: TStringGrid
         Left = 536
@@ -478,7 +478,7 @@ object Form1: TForm1
       end
       object diasnDBLookupComboBox: TDBLookupComboBox
         Left = 160
-        Height = 21
+        Height = 22
         Top = 36
         Width = 136
         KeyField = 'key'
@@ -491,7 +491,7 @@ object Form1: TForm1
       end
       object diatskDBLookupComboBox: TDBLookupComboBox
         Left = 304
-        Height = 21
+        Height = 22
         Top = 36
         Width = 616
         KeyField = 'key'
@@ -509,8 +509,8 @@ object Form1: TForm1
         AnchorSideBottom.Control = TabSheet7
         AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 314
-        Top = 64
+        Height = 288
+        Top = 88
         Width = 914
         Anchors = [akTop, akLeft, akBottom]
         BorderSpacing.Bottom = 5
@@ -776,6 +776,31 @@ object Form1: TForm1
         TabOrder = 7
         Visible = False
       end
+      object dianteDBLookupComboBox: TDBLookupComboBox
+        Left = 304
+        Height = 22
+        Top = 61
+        Width = 616
+        KeyField = 'key'
+        ListField = 'note'
+        ListFieldIndex = 0
+        ListSource = DataSource13
+        LookupCache = False
+        OnChange = dianteDBLookupComboBoxChange
+        OnClick = dianteDBLookupComboBoxClick
+        OnSelect = diatskDBLookupComboBoxSelect
+        PopupMenu = wnwPopupMenu
+        TabOrder = 9
+      end
+      object dianteEdit: TEdit
+        Left = 304
+        Height = 22
+        Top = 61
+        Width = 598
+        PopupMenu = wnwPopupMenu
+        TabOrder = 8
+        Visible = False
+      end
     end
     object TabSheet9: TTabSheet
       Caption = 'Task Events'
@@ -943,7 +968,7 @@ object Form1: TForm1
       end
       object diatskDBLookupComboBox1: TDBLookupComboBox
         Left = 262
-        Height = 21
+        Height = 22
         Top = 36
         Width = 656
         ListFieldIndex = 0
@@ -954,11 +979,11 @@ object Form1: TForm1
     end
     object TabSheet11: TTabSheet
       Caption = 'People'
-      ClientHeight = 383
+      ClientHeight = 381
       ClientWidth = 926
       object pplfncDBLookupComboBox: TDBLookupComboBox
         Left = 277
-        Height = 21
+        Height = 22
         Top = 40
         Width = 123
         KeyField = 'key'
@@ -970,14 +995,14 @@ object Form1: TForm1
       end
       object pplsnEdit: TEdit
         Left = 141
-        Height = 21
+        Height = 22
         Top = 40
         Width = 122
         TabOrder = 1
       end
       object pplnmEdit: TEdit
         Left = 5
-        Height = 21
+        Height = 22
         Top = 40
         Width = 122
         TabOrder = 2
@@ -986,7 +1011,7 @@ object Form1: TForm1
         AnchorSideBottom.Control = TabSheet11
         AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 306
+        Height = 304
         Top = 72
         Width = 395
         Anchors = [akTop, akLeft, akBottom]
@@ -1153,9 +1178,9 @@ object Form1: TForm1
       end
       object DateTimePicker2: TDateTimePicker
         Left = 416
-        Height = 21
+        Height = 22
         Top = 40
-        Width = 79
+        Width = 105
         CenturyFrom = 1941
         MaxDate = 2958465
         MinDate = -53780
@@ -1176,9 +1201,9 @@ object Form1: TForm1
       end
       object DateTimePicker3: TDateTimePicker
         Left = 835
-        Height = 21
+        Height = 22
         Top = 40
-        Width = 79
+        Width = 105
         CenturyFrom = 1941
         MaxDate = 2958465
         MinDate = -53780
@@ -1201,7 +1226,7 @@ object Form1: TForm1
         AnchorSideBottom.Control = TabSheet11
         AnchorSideBottom.Side = asrBottom
         Left = 416
-        Height = 306
+        Height = 304
         Top = 72
         Width = 500
         Anchors = [akTop, akLeft, akBottom]
@@ -1217,9 +1242,9 @@ object Form1: TForm1
       end
       object pplLabel: TLabel
         Left = 552
-        Height = 13
+        Height = 14
         Top = 46
-        Width = 15
+        Width = 40
         Caption = '     '
         ParentColor = False
       end
@@ -1631,7 +1656,7 @@ object Form1: TForm1
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
-            ClientHeight = 87
+            ClientHeight = 86
             ClientWidth = 85
             ItemIndex = 0
             Items.Strings = (
@@ -1664,7 +1689,7 @@ object Form1: TForm1
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
-            ClientHeight = 87
+            ClientHeight = 86
             ClientWidth = 157
             ItemIndex = 2
             Items.Strings = (
@@ -1689,7 +1714,7 @@ object Form1: TForm1
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
-            ClientHeight = 55
+            ClientHeight = 54
             ClientWidth = 157
             ItemIndex = 0
             Items.Strings = (
@@ -1721,7 +1746,7 @@ object Form1: TForm1
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
-            ClientHeight = 87
+            ClientHeight = 86
             ClientWidth = 109
             ItemIndex = 2
             Items.Strings = (
@@ -1754,7 +1779,7 @@ object Form1: TForm1
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
-            ClientHeight = 152
+            ClientHeight = 151
             ClientWidth = 85
             ItemIndex = 1
             Items.Strings = (
@@ -2842,5 +2867,22 @@ object Form1: TForm1
     DataSet = SQLQuery12
     left = 628
     top = 257
+  end
+  object DataSource13: TDataSource
+    DataSet = SQLQuery13
+    left = 791
+    top = 190
+  end
+  object SQLQuery13: TSQLQuery
+    FieldDefs = <>
+    Database = SQLite3Connection1
+    Transaction = SQLTransaction1
+    SQL.Strings = (
+      'select * from note order by "key" desc;'
+    )
+    Options = []
+    Params = <>
+    left = 792
+    top = 152
   end
 end

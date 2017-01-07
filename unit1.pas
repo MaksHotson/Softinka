@@ -22,6 +22,9 @@ type
     BitBtn26: TBitBtn;
     BitBtn27: TBitBtn;
     Button1: TButton;
+    DataSource13: TDataSource;
+    dianteDBLookupComboBox: TDBLookupComboBox;
+    dianteEdit: TEdit;
     Label2: TLabel;
     MemTabsSaveToDBButton: TButton;
     MemTabDnButton: TButton;
@@ -46,6 +49,7 @@ type
     SQLQuery11: TSQLQuery;
     MemTabsStringGrid: TStringGrid;
     SQLQuery12: TSQLQuery;
+    SQLQuery13: TSQLQuery;
     TabControl1: TTabControl;
     TabSheet11: TTabSheet;
     TabSheet4: TTabSheet;
@@ -208,6 +212,8 @@ type
     procedure diadelMenuItemClick(Sender: TObject);
     procedure diaedtActionExecute(Sender: TObject);
     procedure diaedtMenuItemClick(Sender: TObject);
+    procedure dianteDBLookupComboBoxChange(Sender: TObject);
+    procedure dianteDBLookupComboBoxClick(Sender: TObject);
     procedure diatskDBLookupComboBoxChange(Sender: TObject);
     procedure diatskDBLookupComboBoxEditingDone(Sender: TObject);
     procedure diatskDBLookupComboBoxSelect(Sender: TObject);
@@ -311,6 +317,9 @@ var
   diatskDBLCBEdited: Boolean;
   pplKey: Integer;
   MemTabsStringCount: Integer;
+  ss: Integer;
+  ssn: Integer;
+
 
 implementation
 
@@ -347,6 +356,7 @@ begin
   SQLQuery3.Active := True;
   SQLQuery6.Active := True;
   SQLQuery7.Active := True;
+  SQLQuery13.Active := True;
   SQLQuery8.Active := True;
 //  DBGrid1.DefaultDrawing := False;
 
@@ -392,6 +402,9 @@ begin
   diatskEdit.Visible := False;
   diatskDBLookupComboBox.Visible := True;
 
+//  dianteEdit.Visible := False;
+  dianteDBLookupComboBox.Visible := True;
+
   RadioButton4.Checked := True;
 
   if(Form1.MemTabsStringGrid.Cells[0,0] = '') then
@@ -412,12 +425,12 @@ begin
 
   SQliteLibraryName := ExtractFilePath(Application.ExeName) + 'sqlite3.dll';
 
-  SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
+  SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key, diary_record.note_key '
   + 'from diary_record, people, task_desc '
   + 'where people."key"=diary_record.people_key '
   + 'and task_desc."key"=diary_record.task_desc_key '
   + 'union all '
-  + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
+  + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key, diary_record.note_key '
   + 'from diary_record, people, nowork '
   + 'where people."key"=diary_record.people_key '
   + 'and nowork."key"=diary_record.nowork_key '
@@ -590,10 +603,12 @@ begin
     wrkMenuItemClick(Sender);
     diatskDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.task_desc_key').AsString;
   end;
+  dianteDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.note_key').AsString;
 end;
 
 procedure TForm1.diaaddActionExecute(Sender: TObject);
 var
+  notekey: Integer;
   taskkey: Integer;
   CurKey: Integer;
 begin
@@ -627,22 +642,52 @@ begin
       taskkey := diatskDBLookupComboBox.KeyValue;
     end;
 
+    if(dianteEdit.Visible) then
+      begin
+        SQLQuery13.Close;
+        SQLQuery13.SQL.Clear;
+        SQLQuery13.SQL.Add('select * from note where note = ''' + dianteEdit.Text + ''';');
+        SQLQuery13.Open;
+        if SQLQuery13.IsEmpty then
+          begin
+            SQLQuery13.Close;
+            SQLQuery13.SQL.Clear;
+            SQLQuery13.SQL.Add('insert into note (note) values (''' + dianteEdit.Text + ''');');
+            SQLQuery13.ExecSQL;
+            SQLite3Connection1.Transaction.Commit;
+            SQLQuery13.Close;
+            SQLQuery13.SQL.Clear;
+            SQLQuery13.SQL.Add('select * from note;');
+            SQLQuery13.Open;
+            SQLQuery13.Last;
+            notekey := SQLQuery13.FieldByName('key').AsInteger;
+          end
+        else
+          begin
+            notekey := SQLQuery13.FieldByName('key').AsInteger;
+          end;
+      end else
+      begin
+        notekey := diatskDBLookupComboBox.KeyValue;
+      end;
 
   Form1.SQLQuery8.Close;
   Form1.SQLQuery8.SQL.Clear;
 
   if(RadioButton2.Checked) then
     begin
-      Form1.SQLQuery8.SQL.Add('insert into diary_record (hours, people_key, cur_date, nowork_key) values ('
+      Form1.SQLQuery8.SQL.Add('insert into diary_record (hours, people_key, cur_date, nowork_key, note_key) values ('
       + Edit1.Text + ', '
       + IntToStr(diasnDBLookupComboBox.KeyValue) + ', '''
       + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date) + ''', '
-      + IntToStr(taskkey) + ');');
+      + IntToStr(taskkey) + ', '
+      + IntToStr(notekey) + ');');
     end else begin
-      Form1.SQLQuery8.SQL.Add('insert into diary_record (hours, people_key, task_desc_key, cur_date) values ('
+      Form1.SQLQuery8.SQL.Add('insert into diary_record (hours, people_key, task_desc_key, note_key, cur_date) values ('
       + Edit1.Text + ', '
       + IntToStr(diasnDBLookupComboBox.KeyValue) + ', '
-      + IntToStr(taskkey) + ', '''
+      + IntToStr(taskkey) + ', '
+      + IntToStr(notekey) + ', '''
       + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date) + ''');');
     end;
   Label1.Caption := SQLQuery8.SQL.Strings[0];
@@ -661,6 +706,7 @@ begin
   Grid8Formating();
   wrkMenuItemClick(Sender);
   Form1.DBGrid6.DataSource.DataSet.Locate('dkey', CurKey, []);
+  dianteEdit.Visible := False;
 end;
 
 procedure TForm1.diaaddMenuItemClick(Sender: TObject);
@@ -703,6 +749,7 @@ procedure TForm1.diaedtActionExecute(Sender: TObject);
 var
   TempKey: Integer;
   taskkey: Integer;
+  notekey: Integer;
   CurKey: Integer;
 begin
   CurKey := DBGrid6.DataSource.DataSet.FieldByName('dkey').AsInteger;
@@ -736,6 +783,35 @@ begin
       taskkey := diatskDBLookupComboBox.KeyValue;
     end;
 
+  if(dianteEdit.Visible) then
+    begin
+      SQLQuery13.Close;
+      SQLQuery13.SQL.Clear;
+      SQLQuery13.SQL.Add('select * from note where note = ''' + dianteEdit.Text + ''';');
+      SQLQuery13.Open;
+      if SQLQuery13.IsEmpty then
+        begin
+          SQLQuery13.Close;
+          SQLQuery13.SQL.Clear;
+          SQLQuery13.SQL.Add('insert into note (note) values (''' + dianteEdit.Text + ''');');
+          SQLQuery13.ExecSQL;
+          SQLite3Connection1.Transaction.Commit;
+          SQLQuery13.Close;
+          SQLQuery13.SQL.Clear;
+          SQLQuery13.SQL.Add('select * from note;');
+          SQLQuery13.Open;
+          SQLQuery13.Last;
+          notekey := SQLQuery13.FieldByName('key').AsInteger;
+        end
+      else
+        begin
+          notekey := SQLQuery13.FieldByName('key').AsInteger;
+        end;
+    end else
+    begin
+      notekey := diatskDBLookupComboBox.KeyValue;
+    end;
+
 
   Form1.SQLQuery8.Close;
   Form1.SQLQuery8.SQL.Clear;
@@ -747,6 +823,7 @@ begin
       + ', cur_date = ''' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date)
       + ''', nowork_key = ' + IntToStr(taskkey)
       + ', task_desc_key = ' + 'null'
+      + ', note_key = ' + IntToStr(notekey)
       + ' where key = ' + IntToStr(TempKey)
       + ';');
     end else begin
@@ -756,6 +833,7 @@ begin
       + ', cur_date = ''' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date)
       + ''', nowork_key = ' + 'null'
       + ', task_desc_key = ' + IntToStr(taskkey)
+      + ', note_key = ' + IntToStr(notekey)
       + ' where key = ' + IntToStr(TempKey)
       + ';');
     end;
@@ -774,6 +852,7 @@ begin
   Grid8Formating();
   wrkMenuItemClick(Sender);
   Form1.DBGrid6.DataSource.DataSet.Locate('dkey', CurKey, []);
+  dianteEdit.Visible := False;
 end;
 
 procedure TForm1.diaedtMenuItemClick(Sender: TObject);
@@ -781,12 +860,41 @@ begin
   diaedtActionExecute(Sender);
 end;
 
+procedure TForm1.dianteDBLookupComboBoxChange(Sender: TObject);
+begin
+  ssn := dianteDBLookupComboBox.SelStart;
+  dianteEdit.Caption := dianteDBLookupComboBox.Text;
+  dianteEdit.Visible := True;
+  dianteDBLookupComboBox.Visible := False;
+  dianteDBLookupComboBox.ListField := '';
+  dianteDBLookupComboBox.KeyField := '';
+  SQLQuery13.Close;
+  SQLQuery13.SQL.Clear;
+  SQLQuery13.SQL.Add('select * from note order by "key" desc;');
+  SQLQuery13.Open;
+  dianteDBLookupComboBox.ListSource := DataSource13;
+  dianteDBLookupComboBox.ListField := 'note';
+  dianteDBLookupComboBox.KeyField := 'key';
+  dianteDBLookupComboBox.Visible := True;
+  dianteEdit.SetFocus;
+  dianteEdit.SelStart := ssn;
+  dianteEdit.SelLength := 0;
+end;
+
+procedure TForm1.dianteDBLookupComboBoxClick(Sender: TObject);
+begin
+  dianteEdit.Visible := False;
+end;
+
 procedure TForm1.diatskDBLookupComboBoxChange(Sender: TObject);
 begin
+  ss := diatskDBLookupComboBox.SelStart;
+  dianteEdit.Caption := diatskDBLookupComboBox.Text;
   diatskDBLCBEdited := True;
   BitBtn7.Enabled := False;
   BitBtn8.Enabled := False;
   BitBtn9.Enabled := False;
+  wnwTActionExecute(Sender);
 end;
 
 procedure TForm1.diatskDBLookupComboBoxEditingDone(Sender: TObject);
@@ -1165,7 +1273,7 @@ begin
   DateTimePicker3.Date := SQLQuery11.FieldByName('cur_date').AsDateTime;
 
   SqlString := 'select task_desc.breef as task, sum(diary_record.hours) as hours, ' +
-                'round(sum(diary_record.hours) * 100.0 / ' + IntToStr(TotalHours) + ', 2) as percent ' +
+                'printf("%.2f", round(10000*sum(diary_record.hours)/' + IntToStr(TotalHours) + ')/100) as percent ' +
                'from diary_record, task_desc ' +
                'where ' +
                'task_desc."key" = diary_record.task_desc_key' +
@@ -1181,6 +1289,7 @@ begin
   ppltsksDBGrid.Columns[1].Width := Round(ppltsksDBGrid.ClientWidth*0.1);
   ppltsksDBGrid.Columns[2].Width := Round(ppltsksDBGrid.ClientWidth*0.1);
   ppltsksDBGrid.Columns[0].Width := ppltsksDBGrid.ClientWidth - ppltsksDBGrid.Columns[1].Width - ppltsksDBGrid.Columns[2].Width;
+  ppltsksDBGrid.Columns[2].Alignment := taRightJustify;
 end;
 
 procedure TForm1.prjaddActionExecute(Sender: TObject);
@@ -1368,12 +1477,12 @@ end;
 
 procedure TForm1.RadioButton4Click(Sender: TObject);
 begin
-  SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
+  SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key, diary_record.note_key '
   + 'from diary_record, people, task_desc '
   + 'where people."key"=diary_record.people_key '
   + 'and task_desc."key"=diary_record.task_desc_key '
   + 'union all '
-  + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
+  + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key, diary_record.note_key '
   + 'from diary_record, people, nowork '
   + 'where people."key"=diary_record.people_key '
   + 'and nowork."key"=diary_record.nowork_key '
@@ -1397,14 +1506,14 @@ begin
   FS.DateSeparator:='-';
   FS.ShortDateFormat:='yyyy-mm-dd';
   TmpDateStr :=  DbGrid6.DataSource.DataSet.FieldByName('diary_record.cur_date').AsString;
-  SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
+  SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key, diary_record.note_key '
   + 'from diary_record, people, task_desc '
   + 'where people."key"=diary_record.people_key '
   + 'and task_desc."key"=diary_record.task_desc_key '
   + 'and (diary_record.cur_date=''' + TmpDateStr + ''' '
   + 'or diary_record.cur_date=''' + FormatDateTime('YYYY-MM-DD', DateTimePicker1.Date) + ''') '
   + 'union all '
-  + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
+  + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key, diary_record.note_key '
   + 'from diary_record, people, nowork '
   + 'where people."key"=diary_record.people_key '
   + 'and nowork."key"=diary_record.nowork_key '
@@ -1436,13 +1545,13 @@ begin
 //  TmpDateStr :=  DbGrid6.DataSource.DataSet.FieldByName('diary_record.cur_date').AsString;
 //  TmpPeopleKey := DbGrid6.DataSource.DataSet.FieldByName('diary_record.people_key').AsInteger;
   TmpPeopleKeyStr := DbGrid6.DataSource.DataSet.FieldByName('diary_record.people_key').AsString;
-  SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
+  SelectQ8String := 'select diary_record.cur_date, diary_record.hours, people.surname, task_desc.breef as wrk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key, diary_record.note_key '
   + 'from diary_record, people, task_desc '
   + 'where people."key"=diary_record.people_key '
   + 'and task_desc."key"=diary_record.task_desc_key '
   + 'and diary_record.people_key=' + TmpPeopleKeyStr + ' '
   + 'union all '
-  + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key '
+  + 'select diary_record.cur_date, diary_record.hours, people.surname, nowork.reason as nwk, diary_record."key" as dkey, diary_record.people_key, diary_record.task_desc_key, diary_record.nowork_key, diary_record.note_key '
   + 'from diary_record, people, nowork '
   + 'where people."key"=diary_record.people_key '
   + 'and nowork."key"=diary_record.nowork_key '
@@ -1721,6 +1830,11 @@ end;
 
 procedure TForm1.wnwTActionExecute(Sender: TObject);
 begin
+//  diatskEdit.Caption := diatskDBLookupComboBox.Text;
+  diatskDBLCBEdited := False;
+  BitBtn7.Enabled := True;
+  BitBtn8.Enabled := True;
+  BitBtn9.Enabled := True;
   diatskEdit.Visible := True;
   diatskDBLookupComboBox.Visible := False;
   diatskDBLookupComboBox.ListField := '';
@@ -1736,6 +1850,9 @@ begin
   RadioButton2.Checked := False;
   RadioButton3.Checked := True;
   diatskEdit.SetFocus;
+  diatskEdit.SelStart := ss;
+  diatskEdit.SelLength := 0;
+
 end;
 
 procedure TForm1.wnwWActionExecute(Sender: TObject);
