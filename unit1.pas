@@ -15,6 +15,7 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    diapickAction: TAction;
     BitBtn13: TBitBtn;
     BitBtn14: TBitBtn;
     BitBtn15: TBitBtn;
@@ -205,7 +206,9 @@ type
     procedure DateTimePicker2Change(Sender: TObject);
     procedure DateTimePicker3Change(Sender: TObject);
     procedure DBBackupButtonClick(Sender: TObject);
+    procedure DBGrid6CellClick(Sender: TObject; Column: TColumn);
     procedure DBGrid6DblClick(Sender: TObject);
+    procedure DBGrid6KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure diaaddActionExecute(Sender: TObject);
     procedure diaaddMenuItemClick(Sender: TObject);
     procedure diadelActionExecute(Sender: TObject);
@@ -214,6 +217,7 @@ type
     procedure diaedtMenuItemClick(Sender: TObject);
     procedure dianteDBLookupComboBoxChange(Sender: TObject);
     procedure dianteDBLookupComboBoxClick(Sender: TObject);
+    procedure diapickActionExecute(Sender: TObject; Wdate: Boolean);
     procedure diatskDBLookupComboBoxChange(Sender: TObject);
     procedure diatskDBLookupComboBoxEditingDone(Sender: TObject);
     procedure diatskDBLookupComboBoxSelect(Sender: TObject);
@@ -583,6 +587,16 @@ begin
   FormActivate(Sender);
 end;
 
+procedure TForm1.DBGrid6CellClick(Sender: TObject; Column: TColumn);
+begin
+  if(DbGrid6.SelectedIndex = 0) then begin
+//  if(Column.Index = 0) then begin
+    diapickActionExecute(Sender, True);
+  end else begin
+    diapickActionExecute(Sender, False);
+  end;
+end;
+
 procedure TForm1.DBGrid6DblClick(Sender: TObject);
 var
   FS: TFormatSettings;
@@ -604,6 +618,17 @@ begin
     diatskDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.task_desc_key').AsString;
   end;
   dianteDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.note_key').AsString;
+end;
+
+procedure TForm1.DBGrid6KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState
+  );
+begin
+  if(DbGrid6.SelectedIndex = 0) then begin
+//  if(Column.Index = 0) then begin
+    diapickActionExecute(Sender, True);
+  end else begin
+    diapickActionExecute(Sender, False);
+  end;
 end;
 
 procedure TForm1.diaaddActionExecute(Sender: TObject);
@@ -884,6 +909,29 @@ end;
 procedure TForm1.dianteDBLookupComboBoxClick(Sender: TObject);
 begin
   dianteEdit.Visible := False;
+end;
+
+procedure TForm1.diapickActionExecute(Sender: TObject; Wdate: Boolean);
+var
+  FS: TFormatSettings;
+begin
+  FS:=DefaultFormatSettings;
+  FS.DateSeparator:='-';
+  FS.ShortDateFormat:='yyyy-mm-dd';
+
+  if(WDate) then begin
+    DateTimePicker1.Date :=  StrToDate(DbGrid6.DataSource.DataSet.FieldByName('diary_record.cur_date').AsString, FS);
+  end;
+  Edit1.Text := DbGrid6.DataSource.DataSet.FieldByName('diary_record.hours').AsString;
+  diasnDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.people_key').AsString;
+  if(DbGrid6.DataSource.DataSet.FieldByName('diary_record.task_desc_key').IsNull) then begin
+    nwMenuItemClick(Sender);
+    diatskDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.nowork_key').AsString;
+  end else begin
+    wrkMenuItemClick(Sender);
+    diatskDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.task_desc_key').AsString;
+  end;
+  dianteDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.note_key').AsString;
 end;
 
 procedure TForm1.diatskDBLookupComboBoxChange(Sender: TObject);
