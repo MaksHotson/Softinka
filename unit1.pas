@@ -590,7 +590,6 @@ end;
 procedure TForm1.DBGrid6CellClick(Sender: TObject; Column: TColumn);
 begin
   if(DbGrid6.SelectedIndex = 0) then begin
-//  if(Column.Index = 0) then begin
     diapickActionExecute(Sender, True);
   end else begin
     diapickActionExecute(Sender, False);
@@ -598,33 +597,18 @@ begin
 end;
 
 procedure TForm1.DBGrid6DblClick(Sender: TObject);
-var
-  FS: TFormatSettings;
 begin
-  FS:=DefaultFormatSettings;
-  FS.DateSeparator:='-';
-  FS.ShortDateFormat:='yyyy-mm-dd';
-
   if(DbGrid6.SelectedIndex = 0) then begin
-    DateTimePicker1.Date :=  StrToDate(DbGrid6.DataSource.DataSet.FieldByName('diary_record.cur_date').AsString, FS);
-  end;
-  Edit1.Text := DbGrid6.DataSource.DataSet.FieldByName('diary_record.hours').AsString;
-  diasnDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.people_key').AsString;
-  if(DbGrid6.DataSource.DataSet.FieldByName('diary_record.task_desc_key').IsNull) then begin
-    nwMenuItemClick(Sender);
-    diatskDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.nowork_key').AsString;
+    diapickActionExecute(Sender, True);
   end else begin
-    wrkMenuItemClick(Sender);
-    diatskDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.task_desc_key').AsString;
+    diapickActionExecute(Sender, False);
   end;
-  dianteDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.note_key').AsString;
 end;
 
 procedure TForm1.DBGrid6KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
   if(DbGrid6.SelectedIndex = 0) then begin
-//  if(Column.Index = 0) then begin
     diapickActionExecute(Sender, True);
   end else begin
     diapickActionExecute(Sender, False);
