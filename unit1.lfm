@@ -790,8 +790,9 @@ object Form1: TForm1
         LookupCache = False
         OnChange = dianteDBLookupComboBoxChange
         OnClick = dianteDBLookupComboBoxClick
-        OnSelect = diatskDBLookupComboBoxSelect
-        PopupMenu = wnwPopupMenu
+        OnSelect = dianteDBLookupComboBoxSelect
+        PopupMenu = notePopupMenu
+        ReadOnly = True
         TabOrder = 9
       end
       object dianteEdit: TEdit
@@ -799,7 +800,7 @@ object Form1: TForm1
         Height = 22
         Top = 61
         Width = 598
-        PopupMenu = wnwPopupMenu
+        PopupMenu = notePopupMenu
         TabOrder = 8
         Visible = False
       end
@@ -2891,5 +2892,17 @@ object Form1: TForm1
     Params = <>
     left = 792
     top = 152
+  end
+  object notePopupMenu: TPopupMenu
+    left = 853
+    top = 78
+    object MenuItem8: TMenuItem
+      Caption = 'Edit'
+      OnClick = MenuItem8Click
+    end
+    object MenuItem9: TMenuItem
+      Caption = 'Select'
+      OnClick = MenuItem9Click
+    end
   end
 end

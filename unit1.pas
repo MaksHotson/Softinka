@@ -37,7 +37,10 @@ type
     DateTimePicker3: TDateTimePicker;
     DBGrid1: TDBGrid;
     MemTabsEdit: TEdit;
+    MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
     Panel2: TPanel;
+    notePopupMenu: TPopupMenu;
     pplLabel: TLabel;
     ppltsksDBGrid: TDBGrid;
     ppledtDBGrid: TDBGrid;
@@ -217,6 +220,7 @@ type
     procedure diaedtMenuItemClick(Sender: TObject);
     procedure dianteDBLookupComboBoxChange(Sender: TObject);
     procedure dianteDBLookupComboBoxClick(Sender: TObject);
+    procedure dianteDBLookupComboBoxSelect(Sender: TObject);
     procedure diapickActionExecute(Sender: TObject; Wdate: Boolean);
     procedure diatskDBLookupComboBoxChange(Sender: TObject);
     procedure diatskDBLookupComboBoxEditingDone(Sender: TObject);
@@ -235,6 +239,8 @@ type
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
+    procedure MenuItem8Click(Sender: TObject);
+    procedure MenuItem9Click(Sender: TObject);
     procedure ntMenuItemClick(Sender: TObject);
     procedure ppladdActionExecute(Sender: TObject);
     procedure ppldelActionExecute(Sender: TObject);
@@ -677,7 +683,7 @@ begin
           end;
       end else
       begin
-        notekey := diatskDBLookupComboBox.KeyValue;
+        notekey := dianteDBLookupComboBox.KeyValue;
       end;
 
   Form1.SQLQuery8.Close;
@@ -710,6 +716,7 @@ begin
   SQLQuery1.Active := True;
   SQLQuery5.Active := True;
   SQLQuery10.Active := True;
+  SQLQuery13.Active := True;
 
   Grid6Formating();
   Grid8Formating();
@@ -818,7 +825,7 @@ begin
         end;
     end else
     begin
-      notekey := diatskDBLookupComboBox.KeyValue;
+      notekey := dianteDBLookupComboBox.KeyValue;
     end;
 
 
@@ -856,6 +863,7 @@ begin
   SQLQuery1.Active := True;
   SQLQuery5.Active := True;
   SQLQuery10.Active := True;
+  SQLQuery13.Active := True;
 
   Grid6Formating();
   Grid8Formating();
@@ -871,26 +879,14 @@ end;
 
 procedure TForm1.dianteDBLookupComboBoxChange(Sender: TObject);
 begin
-  ssn := dianteDBLookupComboBox.SelStart;
-  dianteEdit.Caption := dianteDBLookupComboBox.Text;
-  dianteEdit.Visible := True;
-  dianteDBLookupComboBox.Visible := False;
-  dianteDBLookupComboBox.ListField := '';
-  dianteDBLookupComboBox.KeyField := '';
-  SQLQuery13.Close;
-  SQLQuery13.SQL.Clear;
-  SQLQuery13.SQL.Add('select * from note order by "key" desc;');
-  SQLQuery13.Open;
-  dianteDBLookupComboBox.ListSource := DataSource13;
-  dianteDBLookupComboBox.ListField := 'note';
-  dianteDBLookupComboBox.KeyField := 'key';
-  dianteDBLookupComboBox.Visible := True;
-  dianteEdit.SetFocus;
-  dianteEdit.SelStart := ssn;
-  dianteEdit.SelLength := 0;
 end;
 
 procedure TForm1.dianteDBLookupComboBoxClick(Sender: TObject);
+begin
+  dianteEdit.Visible := False;
+end;
+
+procedure TForm1.dianteDBLookupComboBoxSelect(Sender: TObject);
 begin
   dianteEdit.Visible := False;
 end;
@@ -915,22 +911,23 @@ begin
     wrkMenuItemClick(Sender);
     diatskDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.task_desc_key').AsString;
   end;
+  dianteEdit.Visible := False;
   dianteDBLookupComboBox.KeyValue := DbGrid6.DataSource.DataSet.FieldByName('diary_record.note_key').AsString;
 end;
 
 procedure TForm1.diatskDBLookupComboBoxChange(Sender: TObject);
 begin
-  ss := diatskDBLookupComboBox.SelStart;
-  dianteEdit.Caption := diatskDBLookupComboBox.Text;
-  diatskDBLCBEdited := True;
-  BitBtn7.Enabled := False;
-  BitBtn8.Enabled := False;
-  BitBtn9.Enabled := False;
-  wnwTActionExecute(Sender);
 end;
 
 procedure TForm1.diatskDBLookupComboBoxEditingDone(Sender: TObject);
 begin
+//  ss := diatskDBLookupComboBox.SelStart;
+//  dianteEdit.Caption := diatskDBLookupComboBox.Text;
+//  diatskDBLCBEdited := True;
+//  BitBtn7.Enabled := False;
+//  BitBtn8.Enabled := False;
+//  BitBtn9.Enabled := False;
+//  wnwTActionExecute(Sender);
 end;
 
 procedure TForm1.diatskDBLookupComboBoxSelect(Sender: TObject);
@@ -1199,6 +1196,37 @@ end;
 procedure TForm1.MenuItem5Click(Sender: TObject);
 begin
 
+end;
+
+procedure TForm1.MenuItem8Click(Sender: TObject);
+begin
+  if not dianteEdit.Visible then begin
+    ssn := dianteDBLookupComboBox.SelStart;
+    dianteEdit.Caption := dianteDBLookupComboBox.Text;
+    dianteEdit.Visible := True;
+    dianteDBLookupComboBox.Visible := False;
+    dianteDBLookupComboBox.ListField := '';
+    dianteDBLookupComboBox.KeyField := '';
+    SQLQuery13.Close;
+    SQLQuery13.SQL.Clear;
+    SQLQuery13.SQL.Add('select * from note order by "key" desc;');
+    SQLQuery13.Open;
+    dianteDBLookupComboBox.ListSource := DataSource13;
+    dianteDBLookupComboBox.ListField := 'note';
+    dianteDBLookupComboBox.KeyField := 'key';
+    dianteDBLookupComboBox.Visible := True;
+    dianteEdit.SetFocus;
+    dianteEdit.SelStart := ssn;
+    dianteEdit.SelLength := 0;
+  end;
+end;
+
+procedure TForm1.MenuItem9Click(Sender: TObject);
+begin
+  if dianteEdit.Visible then begin
+    dianteDBLookupComboBox.SetFocus;
+    dianteEdit.Visible := False;
+  end;
 end;
 
 procedure TForm1.ntMenuItemClick(Sender: TObject);
@@ -1500,11 +1528,20 @@ end;
 
 procedure TForm1.RadioButton3Change(Sender: TObject);
 begin
+  if(RadioButton3.Checked) then begin
+    ss := diatskDBLookupComboBox.SelStart;
+//    dianteEdit.Caption := diatskDBLookupComboBox.Text;
+    diatskEdit.Caption := diatskDBLookupComboBox.Text;
+    diatskDBLCBEdited := True;
+    BitBtn7.Enabled := False;
+    BitBtn8.Enabled := False;
+    BitBtn9.Enabled := False;
+    wnwTActionExecute(Sender);
+  end;
 end;
 
 procedure TForm1.RadioButton3Click(Sender: TObject);
 begin
-  wnwTActionExecute(Sender);
 end;
 
 procedure TForm1.RadioButton4Click(Sender: TObject);
